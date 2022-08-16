@@ -1,10 +1,6 @@
-import tkinter as tk
-
-window = tk.Tk()
-window.title("Customizable Password Gen")
-window.geometry("1080x720")
-window.resizable(False, False)
-window.configure(background='#F7ECDE')
-ttl_lbl = tk.Label()
-
-tk.mainloop()
+#import utils.cpg_utils as cpgu
+from utils.cpg_utils import passwordCrypt as cpgu
+neg = cpgu.inBase64(19)
+print(neg)
+#print(len(cpgu.inBase64(19)))
+print(cpgu.mirrored(neg))
