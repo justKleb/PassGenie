@@ -1,5 +1,6 @@
 import random
 import base64
+import string
 
 class passwordCrypt:
     def genInBase64(leng: int):
@@ -24,3 +25,20 @@ class passwordCrypt:
         for x in range(len(a)):
             out.append(a[(len(toMirror) - 1)-x])
         return ''.join(out)
+    
+    def genRandomNums(leng: int):
+        """Generates specified amount of randomly generated numbers"""
+        nums = []
+        for x in range(leng):
+            nums.append(random.randint(0,9))
+            convStr = ''.join(str(y) for y in nums)
+        return convStr
+
+    def genRandomLetters(leng: int):
+        """Generates specified amount of randomly generated letters"""
+        lets = []
+        letsBase = list(string.ascii_lowercase)
+        for x in range(leng):
+            lets.append(letsBase[random.randint(0,25)])
+            convStr = ''.join(lets)
+        return convStr
