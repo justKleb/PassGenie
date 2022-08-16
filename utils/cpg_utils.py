@@ -2,7 +2,7 @@ import random
 import base64
 import string
 
-class passwordCrypt:
+class passwordGen:
     def genInBase64(leng: int):
         """Generates specified amount of randomly generated symbols (Numbers and letters)"""
         toConv = []
