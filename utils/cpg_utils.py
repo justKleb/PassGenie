@@ -2,17 +2,12 @@ import random
 import base64
 
 class passwordCrypt:
-    def inBase64(leng: int):
-        #x = 0
-        #print(leng)
+    def genInBase64(leng: int):
+        """Generates specified amount of randomly generated symbols (Numbers and letters)"""
         toConv = []
         for x in range(leng):
-            #x += 1
-            #print(x)
             toConv.append(random.randint(0,9))
-            #print(toConv)
             ConvStr = ''.join(str(y) for y in toConv)
-            #print(ConvStr)
             base64Conv = base64.b64encode(ConvStr.encode('ascii'))
             base64Conv = list(base64Conv.decode('utf-8'))
             if len(base64Conv) > leng:
@@ -20,9 +15,10 @@ class passwordCrypt:
                     base64Conv.pop()
             base64Conv = ''.join(base64Conv)
 
-        return base64Conv#.decode('utf-8')
+        return base64Conv
     
-    def mirrored(toMirror: str):
+    def mirror(toMirror: str):
+        """Mirrors the input and returns it"""
         a = list(toMirror)
         out = []
         for x in range(len(a)):
