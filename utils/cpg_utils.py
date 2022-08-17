@@ -18,7 +18,10 @@ class utils:
 
 class passwordGen:
     def genInBase64(leng: int):
-        """Generates specified amount of randomly generated symbols (Numbers and letters)"""
+        """Generates specified amount of randomly generated symbols (Numbers and letters)
+        
+        Args:
+        First: Specifiy Length (int)"""
         toConv = []
         for x in range(leng):
             toConv.append(random.randint(0,9))
@@ -33,7 +36,10 @@ class passwordGen:
         return base64Conv
     
     def mirror(toMirror: str):
-        """Mirrors the input and returns it"""
+        """Mirrors the input and returns it
+
+        Args:
+        First: String to mirror"""
         a = list(toMirror)
         out = []
         for x in range(len(a)):
@@ -41,7 +47,10 @@ class passwordGen:
         return ''.join(out)
     
     def genRandomNums(leng: int):
-        """Generates specified amount of randomly generated numbers"""
+        """Generates specified amount of randomly generated numbers
+
+        Args:
+        First: Specifiy Length (int)"""
         nums = []
         for x in range(leng):
             nums.append(random.randint(0,9))
@@ -49,7 +58,10 @@ class passwordGen:
         return convStr
 
     def genRandomLetters(leng: int):
-        """Generates specified amount of randomly generated letters"""
+        """Generates specified amount of randomly generated letters
+        
+        Args:
+        First: Specifiy Length (int)"""
         lets = []
         letsBase = list(string.ascii_lowercase)
         for x in range(leng):
@@ -58,6 +70,12 @@ class passwordGen:
         return convStr
 
     def genViaMouse(leng: int):
+        """Generates specified amount of randomly generated letters using mouse coordinates.\n
+        Takes (length ÷ 10) seconds to generate.\n
+        Move mouse while generating, since it's based on it's coordinates, if mouse isn't moving - after 6 characters numbers are going to repeat.
+        
+        Args:
+        First: Specifiy Length (int)"""
         posArray = []
         for i in range(leng):
             x = utils.getCursorPosX()
@@ -73,6 +91,7 @@ class passwordGen:
 class crypting:
     
     def toBase64(toConv):
+        """Converts input into Base64 format"""
         toConv = str(base64.encode(toConv))
         return toConv
 
