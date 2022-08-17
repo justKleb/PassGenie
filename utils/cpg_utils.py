@@ -78,17 +78,22 @@ class passwordGen:
         
         Args:
         First: Specifiy Length (int)"""
-        posArray = []
+        posArray = ['']
         for i in range(leng):
+            if len(posArray) >= 2:
+                while utils.getCursorPosY() == posArray[-1]:
+                    l = 0
+                while utils.getCursorPosX() == posArray[-2]:
+                    l = 0
             x = utils.getCursorPosX()
             y = utils.getCursorPosY()
             posArray.append(x)
             posArray.append(y)
-            sleep(0.1)
         posArrayStr = ''.join(str(i) for i in posArray)
         if len(posArray) > leng:
             for i in range(len(posArrayStr) - leng):
                 posArrayStr = posArrayStr[:-1]
+            
         return posArrayStr
 class crypting:
     
@@ -98,18 +103,6 @@ class crypting:
         return toConv
 
 class mathFuncs:
-
-    def multiply(a, b):
-        return a * b
-    
-    def sum(a, b):
-        return a + b
-    
-    def degree(a, b):
-        return a ** b
-    
-    def sub(a, b):
-        return a -b
 
     def percentage():
         pass #TODO: Add it.
