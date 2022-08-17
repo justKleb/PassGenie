@@ -1,6 +1,20 @@
 import random
 import base64
 import string
+from ctypes import windll, wintypes, byref
+from time import sleep
+
+class utils:
+
+    def getCursorPosX():
+        cursor = wintypes.POINT()
+        windll.user32.GetCursorPos(byref(cursor))
+        return cursor.x
+    
+    def getCursorPosY():
+        cursor = wintypes.POINT()
+        windll.user32.GetCursorPos(byref(cursor))
+        return cursor.y
 
 class passwordGen:
     def genInBase64(leng: int):
@@ -42,3 +56,39 @@ class passwordGen:
             lets.append(letsBase[random.randint(0,25)])
             convStr = ''.join(lets)
         return convStr
+
+    def genViaMouse(leng: int):
+        posArray = []
+        for i in range(leng):
+            x = utils.getCursorPosX()
+            y = utils.getCursorPosY()
+            posArray.append(x)
+            posArray.append(y)
+            sleep(0.1)
+        posArrayStr = ''.join(str(i) for i in posArray)
+        if len(posArray) > leng:
+            for i in range(len(posArrayStr) - leng):
+                posArrayStr = posArrayStr[:-1]
+        return posArrayStr
+class crypting:
+    
+    def toBase64(toConv):
+        toConv = str(base64.encode(toConv))
+        return toConv
+
+class mathFuncs:
+
+    def multiply(a, b):
+        return a * b
+    
+    def sum(a, b):
+        return a + b
+    
+    def degree(a, b):
+        return a ** b
+    
+    def sub(a, b):
+        return a -b
+
+    def percentage():
+        pass #TODO: Add it.

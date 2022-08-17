@@ -1,8 +1,11 @@
 #import utils.cpg_utils as cpgu
-from utils.cpg_utils import passwordGen as cpgu
-neg = cpgu.genInBase64(19)
+from utils.cpg_utils import passwordGen as pG
+from utils.cpg_utils import utils as ut
+neg = pG.genInBase64(19)
+#x, y = pG.genViaMouse()
 print(neg)
 #print(len(cpgu.inBase64(19)))
-print(cpgu.mirror(neg))
-print(cpgu.genRandomLetters(10))
-print(cpgu.genRandomNums(10))
+print(pG.mirror(neg))
+print(pG.genRandomLetters(10))
+print(pG.genRandomNums(10))
+print(pG.genViaMouse(10))
