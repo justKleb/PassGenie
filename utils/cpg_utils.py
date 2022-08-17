@@ -23,15 +23,17 @@ class passwordGen:
         Args:
         First: Specifiy Length (int)"""
         toConv = []
+        base64Conv = ""
         for x in range(leng):
             toConv.append(random.randint(0,9))
-            ConvStr = ''.join(str(y) for y in toConv)
-            base64Conv = base64.b64encode(ConvStr.encode('ascii'))
-            base64Conv = list(base64Conv.decode('utf-8'))
+            if len(toConv) == leng:
+                ConvStr = ''.join(str(y) for y in toConv)
+                base64Conv = base64.b64encode(ConvStr.encode('ascii'))
+                base64Conv = base64Conv.decode('utf-8')
             if len(base64Conv) > leng:
                 for i in range(len(base64Conv) - leng):
-                    base64Conv.pop()
-            base64Conv = ''.join(base64Conv)
+                    base64Conv = base64Conv[:-1]
+            #base64Conv = ''.join(base64Conv)
 
         return base64Conv
     
