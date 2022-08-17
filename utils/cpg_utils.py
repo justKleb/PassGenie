@@ -2,7 +2,7 @@ import random
 import base64
 import string
 from ctypes import windll, wintypes, byref
-from time import sleep
+import numpy as np
 
 class utils:
 
@@ -102,7 +102,29 @@ class crypting:
         toConv = str(base64.encode(toConv))
         return toConv
 
-class mathFuncs:
+    def toDouble(toConv):
+        """Converts input into a double"""
+        toConv = list(x for x in str(toConv))
+        toConv = np.array(toConv)
+        whereDot = np.where(toConv == '.')[0]
+        whereDot = str(whereDot).replace("[", "")
+        whereDot = str(whereDot).replace("]", "")
+        whereDot = int(whereDot)
+        toConv = toConv[:whereDot + 2]
+        toConv = np.ndarray.tolist(toConv)
+        toConv = ''.join(toConv)
+        return float(toConv)
 
-    def percentage():
-        pass #TODO: Add it.
+class percentage:
+
+    def AinB(a, b):
+        """Returns how much percents is 'a' from 'b'"""
+        return (a / b) * 100
+
+    def fromA(a, b):
+        """Returns specified percents from 'a' number"""
+        return (a/100) * b
+
+    def fromPercent(a, b):
+        """Returns number from how much percent is number from it"""
+        return a * (100/b)
