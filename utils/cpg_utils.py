@@ -39,11 +39,11 @@ class utils:
             if x == '.':
                 savePos = pos
                 if float(toConv[savePos + 3]) >= 5:
-                    toConv = str(toConv)
-                    toConv[savePos + 2] += 1
+                    toConv = list(toConv)
+                    toConv[savePos + 1] = int(toConv[savePos + 1]) + 1
                 toConv = toConv[:savePos + 2]
-        #TODO: Fix
-        return toConv
+                toConv = ''.join(str(y) for y in toConv)
+        return float(toConv)
                 
 
 class passwordGen:
