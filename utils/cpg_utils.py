@@ -16,6 +16,36 @@ class utils:
         windll.user32.GetCursorPos(byref(cursor))
         return cursor.y
 
+    def toDoubleNP(toConv):
+        """Converts input into a double using Numpy"""
+        toConv = list(x for x in str(toConv))
+        toConv = np.array(toConv)
+        whereDot = np.where(toConv == '.')[0]
+        whereDot = str(whereDot).replace("[", "")
+        whereDot = str(whereDot).replace("]", "")
+        whereDot = int(whereDot)
+        toConv = toConv[:whereDot + 2]
+        toConv = np.ndarray.tolist(toConv)
+        toConv = ''.join(toConv)
+        return float(toConv)
+
+    def toDouble(toConv):
+        """Converts input into a double with proper round-up"""
+        toConv = str(toConv)
+        whereDot = 0
+        pos = 0
+        for x in toConv:
+            pos += 1
+            if x == '.':
+                savePos = pos
+                if float(toConv[savePos + 3]) >= 5:
+                    toConv = str(toConv)
+                    toConv[savePos + 2] += 1
+                toConv = toConv[:savePos + 2]
+        #TODO: Fix
+        return toConv
+                
+
 class passwordGen:
     def genInBase64(leng: int):
         """Generates specified amount of randomly generated symbols (Numbers and letters)
@@ -101,19 +131,6 @@ class crypting:
         """Converts input into Base64 format"""
         toConv = str(base64.encode(toConv))
         return toConv
-
-    def toDouble(toConv):
-        """Converts input into a double"""
-        toConv = list(x for x in str(toConv))
-        toConv = np.array(toConv)
-        whereDot = np.where(toConv == '.')[0]
-        whereDot = str(whereDot).replace("[", "")
-        whereDot = str(whereDot).replace("]", "")
-        whereDot = int(whereDot)
-        toConv = toConv[:whereDot + 2]
-        toConv = np.ndarray.tolist(toConv)
-        toConv = ''.join(toConv)
-        return float(toConv)
 
 class percentage:
 
