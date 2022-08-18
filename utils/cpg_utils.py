@@ -38,9 +38,15 @@ class utils:
             pos += 1
             if x == '.':
                 savePos = pos
-                if float(toConv[savePos + 3]) >= 5:
-                    toConv = list(toConv)
-                    toConv[savePos + 1] = int(toConv[savePos + 1]) + 1
+                toConv = list(toConv)
+                if float(toConv[savePos + 1]) + 1 >= 10:
+                    #toConv = list(toConv)
+                    toConv[savePos] = int(toConv[savePos]) + 1
+                    toConv[savePos + 1] = 0
+                else:
+                    if float(toConv[savePos + 2]) >= 5:
+                        #toConv = list(toConv)
+                        toConv[savePos + 1] = int(toConv[savePos + 1]) + 1
                 toConv = toConv[:savePos + 2]
                 toConv = ''.join(str(y) for y in toConv)
         return float(toConv)
