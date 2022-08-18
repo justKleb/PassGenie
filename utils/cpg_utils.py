@@ -92,7 +92,8 @@ class passwordGen:
         nums = []
         for x in range(leng):
             nums.append(random.randint(0,9))
-            convStr = ''.join(str(y) for y in nums)
+            if len(nums) == leng:
+                convStr = ''.join(str(y) for y in nums)
         return convStr
 
     def genRandomLetters(leng: int):
@@ -104,7 +105,8 @@ class passwordGen:
         letsBase = list(string.ascii_lowercase)
         for x in range(leng):
             lets.append(letsBase[random.randint(0,25)])
-            convStr = ''.join(lets)
+            if len(lets) == leng:
+                convStr = ''.join(lets)
         return convStr
 
     def genViaMouse(leng: int):
