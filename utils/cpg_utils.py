@@ -1,8 +1,10 @@
+from genericpath import isfile
 import random
 import base64
 import string
 from ctypes import windll, wintypes, byref
 import numpy as np
+import os
 
 class utils:
 
@@ -50,7 +52,35 @@ class utils:
                 toConv = toConv[:savePos + 2]
                 toConv = ''.join(str(y) for y in toConv)
         return float(toConv)
-                
+
+class fileUtils:
+    def savePassword(toSave, saveName: str):
+        """Saves password into '.pass' file."""
+        if os.path.exists('passwords/' + saveName + '.pass'):
+            print("Password name is used! Use update function instead!")
+            return "Password name is used!"
+        else:
+            f = open('passwords/' + saveName + '.pass', 'w')
+            f.write(str(toSave))
+            f.close()
+
+    def updatePassword(toSave, saveName):
+        """Updates saved password file with new one"""
+        if not os.path.exists('passwords/' + saveName + '.pass'):
+            print("File doesn't exist! Use save function instead!")
+            return "File doesn't exist!"
+        else:
+            f = open('passwords/' + saveName + '.pass', 'w')
+            f.write(str(toSave))
+            f.close()
+
+    def deletePassword(delName):
+        """Deletes saved password file"""
+        if not os.path.exists('passwords/' + delName + '.pass'):
+            print("File doesn't exist! Password should exist lol")
+            return "File doesn't exist!"
+        else:
+            os.remove('passwords/' + delName + '.pass')
 
 class passwordGen:
     def genInBase64(leng: int):
@@ -137,8 +167,32 @@ class crypting:
     
     def toBase64(toConv):
         """Converts input into Base64 format"""
-        toConv = str(base64.encode(toConv))
+        toConv = str(base64.b64encode(toConv))
         return toConv
+
+    def toBase16(toConv):
+        toConv = str(base64.b16encode(toConv))
+        return toConv
+
+    def encryptPasswords():
+        for b in os.listdir('passwords'):
+            f = open('passwords/'+b, 'r')
+            passx = f.read()
+            print(passx)
+            passxENC = base64.b16encode(passx.encode('utf-8'))
+            passxENC = base64.b64encode(passxENC)
+            print(passxENC)
+        f.close()
+    
+    def decryptPasswords():
+        for b in os.listdir('passwords'):
+            f = open('passwords/'+b, 'rb')
+            passx = f.read()
+            print(passx)
+            passxDEC = base64.b64decode(passx.decode('utf-8'))
+            passxDEC = base64.b16decode('0'+passxDEC.decode('utf-8'))
+            print(passxDEC)
+        f.close()
 
 class percentage:
 
