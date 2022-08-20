@@ -174,26 +174,6 @@ class crypting:
         toConv = str(base64.b16encode(toConv))
         return toConv
 
-    def encryptPasswords():
-        for b in os.listdir('passwords'):
-            f = open('passwords/'+b, 'r')
-            passx = f.read()
-            print(passx)
-            passxENC = base64.b16encode(passx.encode('utf-8'))
-            passxENC = base64.b64encode(passxENC)
-            print(passxENC)
-        f.close()
-    
-    def decryptPasswords():
-        for b in os.listdir('passwords'):
-            f = open('passwords/'+b, 'rb')
-            passx = f.read()
-            print(passx)
-            passxDEC = base64.b64decode(passx.decode('utf-8'))
-            passxDEC = base64.b16decode('0'+passxDEC.decode('utf-8'))
-            print(passxDEC)
-        f.close()
-
 class percentage:
 
     def AinB(a, b):
