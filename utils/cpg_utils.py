@@ -190,7 +190,7 @@ class crypting:
     def keyGen():
         if not os.path.exists('passwords/keyGen'):
             f = open('passwords/keyGen', 'wb')
-            f.write(passwordGen.genInBase64(32).encode('utf-8'))
+            f.write(fnet.generate_key())
             f.close()
             #print(dt.now().strftime("[%H:%M:%S]") + " Generated key")
             fileUtils.toLog("Generated key")
@@ -206,7 +206,7 @@ class crypting:
         if ans == 'Y':
             print("Overwriting key...")
             f = open('passwords/keyGen', 'wb')
-            f.write(passwordGen.genInBase64(32).encode('utf-8'))
+            f.write(fnet.generate_key())
             f.close()
             fileUtils.toLog("Key was overwritten!")
 
@@ -218,8 +218,12 @@ class crypting:
             print(f"There's no {ans} option, reverting operation.")
             fileUtils.toLog("Key overwrite canceled. (Wrong option chosen)")
 
-    def encrypt(toEnc, key):
-        print(toEnc + key)
+    def encrypt(toEnc):
+        f = open('passwords/keyGen', 'rb')
+        print(len(fnet.generate_key()))
+        toEnc = fnet(f.read()).encrypt(bytes(toEnc, 'utf-8'))
+        f.close()
+        return toEnc
 class percentage:
 
     def AinB(a, b):
