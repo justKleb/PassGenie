@@ -9,9 +9,18 @@ from utils.cpg_utils import crypting as crypt
 fut.clearLog()
 crypt.keyGen()
 
-#crypt.updKey()
+#
 
 start = time.time()
 #gen = pG.genRandomLetters(1000)
-print(crypt.encrypt("Ass-ass-in"))
+#print(crypt.encrypt("Ass-ass-in"))
+fut.savePassword(pG.genRandomLetters(190), "Lakaka")
+fut.encryptPasswords()
+try:
+    fut.decryptPasswords()
+except:
+    crypt.updKey()
+finally:
+    fut.decryptPasswords()
+
 print("Run took %s seconds" % (time.time() - start))

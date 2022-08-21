@@ -55,34 +55,8 @@ class utils:
         return float(toConv)
 
 class fileUtils:
-    def savePassword(toSave, saveName: str):
-        """Saves password into '.pass' file."""
-        if os.path.exists('passwords/' + saveName + '.pass'):
-            print("Password name is used! Use update function instead!")
-            return "Password name is used!"
-        else:
-            f = open('passwords/' + saveName + '.pass', 'w')
-            f.write(str(toSave))
-            f.close()
 
-    def updatePassword(toSave, saveName):
-        """Updates saved password file with new one"""
-        if not os.path.exists('passwords/' + saveName + '.pass'):
-            print("File doesn't exist! Use save function instead!")
-            return "File doesn't exist!"
-        else:
-            f = open('passwords/' + saveName + '.pass', 'w')
-            f.write(str(toSave))
-            f.close()
-
-    def deletePassword(delName):
-        """Deletes saved password file"""
-        if not os.path.exists('passwords/' + delName + '.pass'):
-            print("File doesn't exist! Password should exist lol")
-            return "File doesn't exist!"
-        else:
-            os.remove('passwords/' + delName + '.pass')
-
+    
     def toLog(toWrite):
         log = open('run/log.log', 'a')
         log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
@@ -95,6 +69,80 @@ class fileUtils:
             log.close()
         except:
             print("Couldn't open the log file")
+
+    def savePassword(toSave, saveName: str):
+        """Saves password into '.pass' file."""
+        fileUtils.toLog(f"Saving to: {saveName}")
+        if os.path.exists('passwords/' + saveName + '.pass'):
+            fileUtils.toLog(f"{saveName} save name is used.")
+            print("Password name is used! Use update function instead!")
+            return "Password name is used!"
+        else:
+            fileUtils.toLog(f"{saveName} saved")
+            f = open('passwords/' + saveName + '.pass', 'w')
+            f.write(str(toSave))
+            f.close()
+
+    def updatePassword(toSave, saveName):
+        """Updates saved password file with new one"""
+        fileUtils.toLog(f"Updating save: {saveName}")
+        if not os.path.exists('passwords/' + saveName + '.pass'):
+            fileUtils.toLog(f"{saveName} save doesn't exist")
+            print("File doesn't exist! Use save function instead!")
+            return "File doesn't exist!"
+        else:
+            fileUtils.toLog(f"{saveName} save updated")
+            f = open('passwords/' + saveName + '.pass', 'w')
+            f.write(str(toSave))
+            f.close()
+
+    def deletePassword(delName):
+        """Deletes saved password file"""
+        fileUtils.toLog(f"Deleting save: {delName}")
+        if not os.path.exists('passwords/' + delName + '.pass'):
+            fileUtils.toLog(f"{delName} save doesn't exist")
+            print("File doesn't exist! Password should exist lol")
+            return "File doesn't exist!"
+        else:
+            os.remove('passwords/' + delName + '.pass')
+            fileUtils.toLog(f"{delName} is deleted")
+
+    def encryptPasswords():
+        fileUtils.toLog(f"Encrypting saved passwords")
+        keyGen = open('passwords/keyGen', 'rb')
+        key = keyGen.read()
+        keyGen.close()
+        files = []
+        for f in os.listdir('passwords/'):
+            if not f == 'keyGen':
+                fileUtils.toLog(f"Added {f} to saves list")
+                files.append(f)
+        for f in files:
+            theFile = open('passwords/'+f, 'wb+')
+            theFile.write(fnet(key).encrypt(theFile.read()))
+            theFile.close()
+        fileUtils.toLog(f"Saves encrypted")
+        print(', '.join(files))
+
+    def decryptPasswords():
+        fileUtils.toLog(f"Decrypting saved passwords")
+        keyGen = open('passwords/keyGen', 'rb')
+        key = keyGen.read()
+        keyGen.close()
+        files = []
+        for f in os.listdir('passwords/'):
+            if not f == 'keyGen':
+                fileUtils.toLog(f"Detected {f} save in list")
+                files.append(f)
+        for f in files:
+            theFile = open('passwords/'+f, 'wb+')
+            filee = theFile.read()
+            theFile.write(fnet(bytes(str(key), 'utf-8')).decrypt(filee))
+            theFile.close()
+
+        fileUtils.toLog(f"Saves decrypted")
+        print(', '.join(files))
+
 class passwordGen:
     def genInBase64(leng: int):
         """Generates specified amount of randomly generated symbols (Numbers and letters)
