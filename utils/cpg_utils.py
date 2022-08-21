@@ -1,10 +1,11 @@
-from genericpath import isfile
 import random
 import base64
 import string
 from ctypes import windll, wintypes, byref
 import numpy as np
 import os
+from cryptography.fernet import Fernet as fnet
+from datetime import datetime as dt
 
 class utils:
 
@@ -82,6 +83,18 @@ class fileUtils:
         else:
             os.remove('passwords/' + delName + '.pass')
 
+    def toLog(toWrite):
+        log = open('run/log.log', 'a')
+        log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
+        log.close()
+    
+    def clearLog():
+        try:
+            log = open('run/log.log', 'w')
+            log.write('')
+            log.close()
+        except:
+            print("Couldn't open the log file")
 class passwordGen:
     def genInBase64(leng: int):
         """Generates specified amount of randomly generated symbols (Numbers and letters)
@@ -174,6 +187,39 @@ class crypting:
         toConv = str(base64.b16encode(toConv))
         return toConv
 
+    def keyGen():
+        if not os.path.exists('passwords/keyGen'):
+            f = open('passwords/keyGen', 'wb')
+            f.write(passwordGen.genInBase64(32).encode('utf-8'))
+            f.close()
+            #print(dt.now().strftime("[%H:%M:%S]") + " Generated key")
+            fileUtils.toLog("Generated key")
+            return True
+        else:
+            #print(dt.now().strftime("[%H:%M:%S]") + " Key is already generated!")
+            fileUtils.toLog("Key is already generated!")
+            return False
+
+    def updKey():
+        print("This will completly overwrite you current generated key, you will loose access to all of your saved passwords\nProceed?")
+        ans = input("[Y/n]: ")
+        if ans == 'Y':
+            print("Overwriting key...")
+            f = open('passwords/keyGen', 'wb')
+            f.write(passwordGen.genInBase64(32).encode('utf-8'))
+            f.close()
+            fileUtils.toLog("Key was overwritten!")
+
+        elif ans == 'n':
+            print("Canceled.")
+            fileUtils.toLog("Key overwrite canceled.")
+        
+        else:
+            print(f"There's no {ans} option, reverting operation.")
+            fileUtils.toLog("Key overwrite canceled. (Wrong option chosen)")
+
+    def encrypt(toEnc, key):
+        print(toEnc + key)
 class percentage:
 
     def AinB(a, b):
