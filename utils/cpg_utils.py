@@ -7,6 +7,21 @@ import os
 from cryptography.fernet import Fernet as fnet
 from datetime import datetime as dt
 
+class log:
+
+    def toLog(toWrite):
+        log = open('run/log.log', 'a')
+        log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
+        log.close()
+    
+    def clearLog():
+        try:
+            log = open('run/log.log', 'w')
+            log.write('')
+            log.close()
+        except:
+            print("Couldn't open the log file")
+
 class utils:
 
     def getCursorPosX():
@@ -56,83 +71,70 @@ class utils:
 
 class fileUtils:
 
-    
-    def toLog(toWrite):
-        log = open('run/log.log', 'a')
-        log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
-        log.close()
-    
-    def clearLog():
-        try:
-            log = open('run/log.log', 'w')
-            log.write('')
-            log.close()
-        except:
-            print("Couldn't open the log file")
-
     def savePassword(toSave, saveName: str):
         """Saves password into '.pass' file."""
-        fileUtils.toLog(f"Saving to: {saveName}")
+        log.toLog(f"Saving to: {saveName}")
         if os.path.exists('passwords/' + saveName + '.pass'):
-            fileUtils.toLog(f"{saveName} save name is used.")
+            log.toLog(f"{saveName} save name is used.")
             print("Password name is used! Use update function instead!")
             return "Password name is used!"
         else:
-            fileUtils.toLog(f"{saveName} saved")
+            log.toLog(f"{saveName} saved")
             f = open('passwords/' + saveName + '.pass', 'w')
             f.write(str(toSave))
             f.close()
 
     def updatePassword(toSave, saveName):
         """Updates saved password file with new one"""
-        fileUtils.toLog(f"Updating save: {saveName}")
+        log.toLog(f"Updating save: {saveName}")
         if not os.path.exists('passwords/' + saveName + '.pass'):
-            fileUtils.toLog(f"{saveName} save doesn't exist")
+            log.toLog(f"{saveName} save doesn't exist")
             print("File doesn't exist! Use save function instead!")
             return "File doesn't exist!"
         else:
-            fileUtils.toLog(f"{saveName} save updated")
+            log.toLog(f"{saveName} save updated")
             f = open('passwords/' + saveName + '.pass', 'w')
             f.write(str(toSave))
             f.close()
 
     def deletePassword(delName):
         """Deletes saved password file"""
-        fileUtils.toLog(f"Deleting save: {delName}")
+        log.toLog(f"Deleting save: {delName}")
         if not os.path.exists('passwords/' + delName + '.pass'):
-            fileUtils.toLog(f"{delName} save doesn't exist")
+            log.toLog(f"{delName} save doesn't exist")
             print("File doesn't exist! Password should exist lol")
             return "File doesn't exist!"
         else:
             os.remove('passwords/' + delName + '.pass')
-            fileUtils.toLog(f"{delName} is deleted")
+            log.toLog(f"{delName} is deleted")
 
     def encryptPasswords():
-        fileUtils.toLog(f"Encrypting saved passwords")
+        log.toLog(f"Encrypting saved passwords")
         keyGen = open('passwords/keyGen', 'rb')
         key = keyGen.read()
         keyGen.close()
         files = []
         for f in os.listdir('passwords/'):
             if not f == 'keyGen':
-                fileUtils.toLog(f"Added {f} to saves list")
+                log.toLog(f"Added {f} to saves list")
                 files.append(f)
         for f in files:
             theFile = open('passwords/'+f, 'wb+')
             theFile.write(fnet(key).encrypt(theFile.read()))
             theFile.close()
-        fileUtils.toLog(f"Saves encrypted")
+        log.toLog(f"Saves encrypted")
         print(', '.join(files))
 
     def decryptPasswords():
-        fileUtils.toLog(f"Decrypting saved passwords")
+        log.toLog(f"Decrypting saved passwords")
         keyGen = open('passwords/keyGen', 'rb')
+        log.toLog
         key = keyGen.read()
         keyGen.close()
         files = []
         for f in os.listdir('passwords/'):
             if not f == 'keyGen':
-                fileUtils.toLog(f"Detected {f} save in list")
+                log.toLog(f"Detected {f} save in list")
                 files.append(f)
         for f in files:
             theFile = open('passwords/'+f, 'wb+')
@@ -140,7 +142,7 @@ class fileUtils:
             theFile.write(fnet(bytes(str(key), 'utf-8')).decrypt(filee))
             theFile.close()
 
-        fileUtils.toLog(f"Saves decrypted")
+        log.toLog(f"Saves decrypted")
         print(', '.join(files))
 
 class passwordGen:
@@ -241,11 +243,11 @@ class crypting:
             f.write(fnet.generate_key())
             f.close()
             #print(dt.now().strftime("[%H:%M:%S]") + " Generated key")
-            fileUtils.toLog("Generated key")
+            log.toLog("Generated key")
             return True
         else:
             #print(dt.now().strftime("[%H:%M:%S]") + " Key is already generated!")
-            fileUtils.toLog("Key is already generated!")
+            log.toLog("Key is already generated!")
             return False
 
     def updKey():
@@ -256,15 +258,15 @@ class crypting:
             f = open('passwords/keyGen', 'wb')
             f.write(fnet.generate_key())
             f.close()
-            fileUtils.toLog("Key was overwritten!")
+            log.toLog("Key was overwritten!")
 
         elif ans == 'n':
             print("Canceled.")
-            fileUtils.toLog("Key overwrite canceled.")
+            log.toLog("Key overwrite canceled.")
         
         else:
             print(f"There's no {ans} option, reverting operation.")
-            fileUtils.toLog("Key overwrite canceled. (Wrong option chosen)")
+            log.toLog("Key overwrite canceled. (Wrong option chosen)")
 
     def encrypt(toEnc):
         f = open('passwords/keyGen', 'rb')
