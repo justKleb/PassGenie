@@ -1,3 +1,12 @@
 {
-    "run_time_timer": true
+    "Settings":{
+
+        "runTimeTimer": false,
+        "launchTimeTimer": true,
+        "attemptKeyGenOnStart": false,
+        
+        "appIcon": "",
+        "appTitle": ""
+
+    }  
 }
