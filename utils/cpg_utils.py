@@ -108,43 +108,6 @@ class fileUtils:
             os.remove('passwords/' + delName + '.pass')
             log.toLog(f"{delName} is deleted")
 
-    def encryptPasswords():
-        log.toLog(f"Encrypting saved passwords")
-        keyGen = open('passwords/keyGen', 'rb')
-        key = keyGen.read()
-        keyGen.close()
-        files = []
-        for f in os.listdir('passwords/'):
-            if not f == 'keyGen':
-                log.toLog(f"Added {f} to saves list")
-                files.append(f)
-        for f in files:
-            theFile = open('passwords/'+f, 'wb+')
-            theFile.write(fnet(key).encrypt(theFile.read()))
-            theFile.close()
-        log.toLog(f"Saves encrypted")
-        print(', '.join(files))
-
-    def decryptPasswords():
-        log.toLog(f"Decrypting saved passwords")
-        keyGen = open('passwords/keyGen', 'rb')
-        log.toLog
-        key = keyGen.read()
-        keyGen.close()
-        files = []
-        for f in os.listdir('passwords/'):
-            if not f == 'keyGen':
-                log.toLog(f"Detected {f} save in list")
-                files.append(f)
-        for f in files:
-            theFile = open('passwords/'+f, 'wb+')
-            filee = theFile.read()
-            theFile.write(fnet(bytes(str(key), 'utf-8')).decrypt(filee))
-            theFile.close()
-
-        log.toLog(f"Saves decrypted")
-        print(', '.join(files))
-
 class passwordGen:
     def genInBase64(leng: int):
         """Generates specified amount of randomly generated symbols (Numbers and letters)
@@ -267,13 +230,6 @@ class crypting:
         else:
             print(f"There's no {ans} option, reverting operation.")
             log.toLog("Key overwrite canceled. (Wrong option chosen)")
-
-    def encrypt(toEnc):
-        f = open('passwords/keyGen', 'rb')
-        print(len(fnet.generate_key()))
-        toEnc = fnet(f.read()).encrypt(bytes(toEnc, 'utf-8'))
-        f.close()
-        return toEnc
 class percentage:
 
     def AinB(a, b):
