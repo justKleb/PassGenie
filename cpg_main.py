@@ -1,15 +1,8 @@
 import json
 import time
-from utils.cpg_utils import passwordGen as pG
-from utils.cpg_utils import utils as ut
-from utils.cpg_utils import fileUtils as fut
-from utils.cpg_utils import percentage as percent
-from utils.cpg_utils import crypting as crypt
 from utils.cpg_utils import log
-from cryptography.fernet import Fernet as fnet
 
 log.clearLog()
-
 start = time.time()
 
 cfg = []
@@ -26,5 +19,5 @@ def cfgGet():
 cfgGet()
 
 if cfg[1]:
-    log.toLog("Run took %s seconds" % (time.time() - start))
-    print("Run took %s seconds" % (time.time() - start))
+    log.toLog("Launch took %s seconds" % (time.time() - start))
+    print("Launch took %s seconds" % (time.time() - start))
