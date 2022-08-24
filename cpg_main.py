@@ -14,9 +14,9 @@ def cfgGet():
     settingsFile.close()
     toLogSETTINGS = []
     for i in settings["Settings"]:
-        toLogSETTINGS.append(f'{i} is set to {settings["Settings"][i]}')
+        toLogSETTINGS.append(f'{i} is set to {settings["Settings"][i]}\n    ')
         cfg.append(settings["Settings"][i])
-        log.toLog(f"Settings: {', '.join(toLogSETTINGS)}")
+    log.toLog(f"Settings: {', '.join(toLogSETTINGS)}")
 
 cfgGet()
 
@@ -25,11 +25,24 @@ if cfg[1]:
     print("Launch took %s seconds" % (time.time() - start))
 # Window draw
 if cfg[6]:
+
     win = tk.Tk()
+    canvas = tk.Canvas(win, width=1080, height=720)
+    canvas.grid(columnspan=10, rowspan=10)
     win.title(cfg[4])
-    win.geometry('1080x720')
     win.iconbitmap(cfg[3])
-    win['bg'] = cfg[5]
+    win.resizable(width=False, height=False)
+    canvas['bg'] = cfg[5]
+    options = ['Custom', 'Random Symbols', 'Random Numbers', 'Random Letters', 'Random Through Mouse', 'Mirror Prev. Part']
+    optionsVar = tk.StringVar(win)
+    optionsVar.set('None')
+    label = tk.Label(win, text="Customizable Password Generator", font='Arial 24 bold', bg=cfg[5], fg='#FFFFFF')
+    label.grid(column=0, row=0)
+    menu = tk.OptionMenu(win, optionsVar, *options)
+    menu.grid(column=0, row=5)
+    menu.configure(relief=tk.FLAT)
+    buttonAdd = tk.Button(win, text="ADD")
+    buttonAdd.grid(column=6, row=5)
     win.mainloop()
 
 if cfg[0]:
