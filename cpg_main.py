@@ -2,6 +2,7 @@ import json
 import time
 import tkinter as tk
 from utils.cpg_utils import log
+from utils.cpg_utils import passwordUtils as pU
 
 log.clearLog()
 start = time.time()
@@ -22,14 +23,14 @@ cfgGet()
 if cfg[1]:
     log.toLog("Launch took %s seconds" % (time.time() - start))
     print("Launch took %s seconds" % (time.time() - start))
-
 # Window draw
-win = tk.Tk()
-win.title(cfg[4])
-win.geometry('1080x720')
-win.iconbitmap(cfg[3])
-win['bg'] = cfg[5]
-win.mainloop()
+if cfg[6]:
+    win = tk.Tk()
+    win.title(cfg[4])
+    win.geometry('1080x720')
+    win.iconbitmap(cfg[3])
+    win['bg'] = cfg[5]
+    win.mainloop()
 
 if cfg[0]:
     if time.time() - start >= 60:

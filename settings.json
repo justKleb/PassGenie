@@ -1,13 +1,11 @@
 {
     "Settings":{
-
         "runTimeTimer": true,
         "launchTimeTimer": true,
         "attemptKeyGenOnStart": false,
-        
         "appIcon": "icon.ico",
         "appTitle": "Customizable Password Generator",
-        "background": "#110f1f"
-
+        "background": "#110f1f",
+        "drawWindow": false
     }  
 }

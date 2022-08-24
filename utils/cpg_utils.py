@@ -2,6 +2,7 @@ import random
 import base64
 import string
 from ctypes import windll, wintypes, byref
+import time
 import numpy as np
 import os
 from cryptography.fernet import Fernet as fnet
@@ -243,3 +244,6 @@ class percentage:
     def fromPercent(a, b):
         """Returns number from how much percent is number from it"""
         return a * (100/b)
+
+class passwordUtils:
+    pass
