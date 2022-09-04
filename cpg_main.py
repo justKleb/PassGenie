@@ -3,9 +3,17 @@ import time
 import tkinter as tk
 from utils.cpg_utils import log
 from utils.cpg_utils import passwordUtils as pU
+from utils.cpg_utils import passwordGen as pG
+from os import path
 
 log.clearLog()
 start = time.time()
+
+if not path.exists('settings.json'):
+    configFile = open('settings.json', 'w')
+    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "Customizable Password Generator","background": "#110f1f","drawWindow": False}})
+    configFile.write(fillEmptyConfig)
+    configFile.close()
 
 cfg = []
 def cfgGet():
@@ -19,6 +27,10 @@ def cfgGet():
     log.toLog(f"Settings: {', '.join(toLogSETTINGS)}")
 
 cfgGet()
+
+#pU.passTest('s')
+
+print(pG.genRandomLetters(1000000))
 
 if cfg[1]:
     log.toLog("Launch took %s seconds" % (time.time() - start))

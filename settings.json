@@ -6,6 +6,6 @@
         "appIcon": "icon.ico",
         "appTitle": "Customizable Password Generator",
         "background": "#110f1f",
-        "drawWindow": true
+        "drawWindow": false
     }  
 }
