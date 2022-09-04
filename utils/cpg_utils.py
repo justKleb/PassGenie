@@ -246,4 +246,22 @@ class percentage:
         return a * (100/b)
 
 class passwordUtils:
-    pass
+    def passTest(toTest):
+        start = time.time()
+        passlen = len(toTest)
+        passList = ['']
+        symList = list(string.ascii_letters) + ['1','2','3','4','5','6','7','8','9','0','-','_','+','=']
+        i = 0
+        while True:
+
+            if passList[-1] == '' or passList[-1] == symList[-1]:
+                i = 0
+                passList.append(symList[0])
+            print(''.join(passList))
+            passList[-1] == symList[i]
+
+            if ''.join(passList) == toTest:
+                break
+
+            i += 1
+        print(time.time() - start, " seconds")
