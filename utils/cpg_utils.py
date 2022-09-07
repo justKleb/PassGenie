@@ -7,6 +7,7 @@ import numpy as np
 import os
 from cryptography.fernet import Fernet as fnet
 from datetime import datetime as dt
+from itertools import product, chain
 
 class log:
 
@@ -69,6 +70,11 @@ class utils:
                 toConv = toConv[:savePos + 2]
                 toConv = ''.join(str(y) for y in toConv)
         return float(toConv)
+
+    def allVars(chSet, maxleng):
+        return (''.join(candidate)
+            for candidate in chain.from_iterable(product(chSet, repeat=i)
+            for i in range(1, maxleng + 1)))
 
 class fileUtils:
 
@@ -246,22 +252,14 @@ class percentage:
         return a * (100/b)
 
 class passwordUtils:
-    def passTest(toTest):
+    def brute(toTest: str, timeInMinutes: float):
+        """Simulates real brute-force attack on password, returns True if password did get cracked, False if didn't."""
+        syms = str(list(string.ascii_lowercase) + list(string.ascii_uppercase) + list('1234567890 =-_+'))
         start = time.time()
-        passlen = len(toTest)
-        passList = ['']
-        symList = list(string.ascii_letters) + ['1','2','3','4','5','6','7','8','9','0','-','_','+','=']
-        i = 0
-        while True:
-
-            if passList[-1] == '' or passList[-1] == symList[-1]:
-                i = 0
-                passList.append(symList[0])
-            print(''.join(passList))
-            passList[-1] == symList[i]
-
-            if ''.join(passList) == toTest:
-                break
-
-            i += 1
-        print(time.time() - start, " seconds")
+        for attempt in utils.allVars(syms, 10):
+            if attempt == toTest:
+                print(f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes.")
+                return False
+            if abs((time.time() - start) - timeInMinutes * 60) <= 0.1:
+                print("That takes longer than specified, password check completed. Password wasn't cracked")
+                return True

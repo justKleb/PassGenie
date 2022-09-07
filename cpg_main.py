@@ -28,9 +28,9 @@ def cfgGet():
 
 cfgGet()
 
-#pU.passTest('s')
+pU.brute(pG.genInBase64(10), 1)
 
-print(pG.genRandomLetters(1000000))
+#print(pG.genRandomLetters(1000000))
 
 if cfg[1]:
     log.toLog("Launch took %s seconds" % (time.time() - start))
