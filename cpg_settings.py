@@ -3,7 +3,7 @@ import json
 import sys
 
 try:
-    f = open('settings.json', 'r')
+    f = open('./settings.json', 'r')
 except:
     print("Couldn't open settings file. Ff you haven't yet, run main file first!")
 cfg = json.loads(f.read())
@@ -14,7 +14,7 @@ def apply_changes(toChange, toWhat):
 def get_current(toGet):
     return cfg["Settings"][toGet]
 def save_cfg():
-    f = open('settings.json', 'w')
+    f = open('./settings.json', 'w')
     json.dump(cfg,f)
     f.close()
 w = tk.Tk()

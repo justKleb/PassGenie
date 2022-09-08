@@ -26,8 +26,8 @@ def settings():
         system('cpg_settings.exe 1')
 #settings()
 
-preLoadCFG = open('settings.json')
-if not path.exists('settings.json') or (path.exists('settings.json') and preLoadCFG.read() == ''):
+preLoadCFG = open('./settings.json')
+if not path.exists('./settings.json') or (path.exists('./settings.json') and preLoadCFG.read() == ''):
     configFile = open('settings.json', 'w')
     fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "Customizable Password Generator","background": "#110f1f","drawWindow": False}})
     configFile.write(fillEmptyConfig)
@@ -36,7 +36,7 @@ if not path.exists('settings.json') or (path.exists('settings.json') and preLoad
 preLoadCFG.close()
 cfg = []
 def cfgGet():
-    settingsFile = open('settings.json')
+    settingsFile = open('./settings.json')
     settings = json.load(settingsFile)
     settingsFile.close()
     toLogSETTINGS = []
@@ -53,9 +53,9 @@ cfgGet()
 
 if cfg[1]:
     log.toLog("Launch took %s seconds" % (time.time() - start))
-    print("Launch took %s seconds" % (time.time() - start))
 
-print(f"{RED}CPG - 0.1a{RESET}\n")
+print(f"{RED}CPG - 0.1a{RESET}")
+print(f"{CYAN}/help{RESET} for commands!\n")
 gens = ['/ranSyms', '/ranNums', '/ranLetters', '/mirrorPrev']
 current_pass = []
 while True:
@@ -72,7 +72,6 @@ while True:
     elif inp == gens[3]:
         current_pass.append(pG.mirror(current_pass[-1]))
     elif inp == '/passwordEnd':
-        print(f'\nPassword have been made. Please choose an option, what to do now?')
         def menu(title, classes, color = 'white'):
             def char(stdscr, ):
                 attrs = {}
@@ -115,11 +114,11 @@ while True:
                         option += 1
                 return option
             return crs.wrapper(char)
-        ans = menu('Options', ['Copy to clipboard','Print-out here', 'Exit without saving'], 'magenta')
+        ans = menu('\nPassword have been made. Please choose an option, what to do now?', ['Copy to clipboard','Print-out here', 'Exit without saving'], 'magenta')
         if ans == 0:
             pyperclip.copy(''.join(current_pass))
         elif ans == 1:
-            print(''.join(current_pass))
+            print(''.join('\n'+current_pass+'\n'))
         elif ans == 2:
             print(f"This will remove {RED}EVERYTHING{RESET} added/generated in password!")
             f = input('Proceed? [Yes/no] : ')
@@ -148,11 +147,15 @@ while True:
         {CYAN}/mirrorPrev{RESET} - Mirrors previous part of password
         {CYAN}/passwordEnd{RESET} - Ends password creation process with options
         {CYAN}/passTest{RESET} - Test your password on a "brute-force"-like attack
+        {CYAN}/settings{RESET} - Open settings dialog
         {CYAN}/exit{RESET} - Exit the programm without saving
-        {CYAN}/help{RESET} - Show this message\n""")
+        {CYAN}/help{RESET} - Show this message
+        {RED}Just type{RESET} to add your stuff in password\n""")
     elif inp == '/passTest':
         is_cracked, string = pU.brute(''.join(current_pass), int(input(f'{RED}Limit time for testing (In minutes) : {RESET}')))
         print(string)
+    elif inp == '/settings':
+        settings()
     else:
         current_pass.append(inp)
     
