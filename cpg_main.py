@@ -117,7 +117,7 @@ while True:
         if ans == 0:
             pyperclip.copy(''.join(current_pass))
         elif ans == 1:
-            print(''.join('\n'+current_pass+'\n'))
+            print('\n' + ''.join(current_pass) + '\n')
         elif ans == 2:
             print(f"This will remove {RED}EVERYTHING{RESET} added/generated in password!")
             f = input('Proceed? [Yes/no] : ')
