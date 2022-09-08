@@ -1,6 +1,5 @@
 import json
 import time
-import tkinter as tk
 from utils.cpg_utils import log
 from utils.cpg_utils import passwordUtils as pU
 from utils.cpg_utils import passwordGen as pG
@@ -21,9 +20,9 @@ BOLD    = "\033[;1m"
 
 def settings():
     try:
-        system('cpg_settings.py 1')
-    except:
         system('cpg_settings.exe 1')
+    except:
+        system('cpg_settings.py 1')
 #settings()
 
 preLoadCFG = open('./settings.json')

@@ -2,3 +2,6 @@ __pycache__/
 passwords/
 test.py
 run/
+*.build/
+*.dist/
+*.onefile-build/
