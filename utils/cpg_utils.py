@@ -254,12 +254,13 @@ class percentage:
 class passwordUtils:
     def brute(toTest: str, timeInMinutes: float):
         """Simulates real brute-force attack on password, returns True if password did get cracked, False if didn't."""
-        syms = str(list(string.ascii_lowercase) + list(string.ascii_uppercase) + list('1234567890 =-_+'))
+        syms = str(list(string.ascii_lowercase) + list(string.ascii_uppercase) + list("""1234567890 =-_+/?\|'";:><,.*&7^%$#@!()[]{} """))
         start = time.time()
+        log.toLog("Starting password testing")
         for attempt in utils.allVars(syms, 10):
             if attempt == toTest:
-                print(f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes.")
-                return False
+                log.toLog(f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes.")
+                return False, f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes"
             if abs((time.time() - start) - timeInMinutes * 60) <= 0.1:
-                print("That takes longer than specified, password check completed. Password wasn't cracked")
-                return True
+                log.toLog("That takes longer than specified, password check completed. Password wasn't cracked")
+                return True, f"That takes longer than specified, password check completed. Password wasn't cracked"
