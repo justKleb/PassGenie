@@ -4,10 +4,13 @@ from utils.cpg_utils import log
 from utils.cpg_utils import passwordUtils as pU
 from utils.cpg_utils import passwordGen as pG
 from utils.cpg_utils import utils
-from os import path, system
+from os import path, system, mkdir
 import _curses as curses
 import curses as crs
 import pyperclip
+
+if not path.exists('run/'):
+    mkdir('run')
 
 log.clearLog()
 start = time.time()
@@ -50,7 +53,7 @@ def cfgGet():
 cfgGet()
 
 if cfg[1]:
-    log.toLog("Launch took %s seconds" % utils.toDouble(time.time() - start))
+    log.toLog("Launch took %s seconds" % utils.toDouble((time.time() - start)+0.001))
 
 print(f"{RED}CPG - 0.1a{RESET}")
 print(f"{CYAN}/help{RESET} for commands!\n")
