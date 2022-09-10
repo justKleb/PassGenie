@@ -3,6 +3,7 @@ import time
 from utils.cpg_utils import log
 from utils.cpg_utils import passwordUtils as pU
 from utils.cpg_utils import passwordGen as pG
+from utils.cpg_utils import utils
 from os import path, system
 import _curses as curses
 import curses as crs
@@ -27,12 +28,12 @@ def settings():
 
 if not path.exists('./settings.json'):
     configFile = open('settings.json', 'w')
-    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "Customizable Password Generator","background": "#110f1f","drawWindow": False}})
+    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "empty","background": "#110f1f","drawWindow": False}})
     configFile.write(fillEmptyConfig)
     configFile.close()
 afterwardCheck = open('./settings.json', 'w+')
 if path.exists('./settings.json') and afterwardCheck.read() == '':
-    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "Customizable Password Generator","background": "#110f1f","drawWindow": False}})
+    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "empty","background": "#110f1f","drawWindow": False}})
     afterwardCheck.write(fillEmptyConfig)
     afterwardCheck.close()
 cfg = []
@@ -49,7 +50,7 @@ def cfgGet():
 cfgGet()
 
 if cfg[1]:
-    log.toLog("Launch took %s seconds" % (time.time() - start))
+    log.toLog("Launch took %s seconds" % utils.toDouble(time.time() - start))
 
 print(f"{RED}CPG - 0.1a{RESET}")
 print(f"{CYAN}/help{RESET} for commands!\n")
@@ -159,6 +160,6 @@ while True:
 
 if cfg[0]:
     if time.time() - start >= 60:
-        log.toLog(f"Program was running for {(time.time() - start)//60} minutes and {(time.time() - start) - (((time.time() - start)//60) * 60)} seconds")
+        log.toLog(f"Program was running for {int((time.time() - start)//60)} minutes and {utils.toDouble((time.time() - start) - (((time.time() - start)//60) * 60))} seconds")
     else:
-        log.toLog(f"Program was running for {time.time() - start} seconds")
+        log.toLog(f"Program was running for {utils.toDouble(time.time() - start)} seconds")
