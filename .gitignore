@@ -5,3 +5,4 @@ run/
 *.build/
 *.dist/
 *.onefile-build/
+*.exe
