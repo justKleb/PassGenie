@@ -3,9 +3,6 @@ import base64
 import string
 from ctypes import windll, wintypes, byref
 import time
-import numpy as np
-import os
-from cryptography.fernet import Fernet as fnet
 from datetime import datetime as dt
 from itertools import product, chain
 
@@ -36,19 +33,6 @@ class utils:
         windll.user32.GetCursorPos(byref(cursor))
         return cursor.y
 
-    def toDoubleNP(toConv):
-        """Converts input into a double using Numpy"""
-        toConv = list(x for x in str(toConv))
-        toConv = np.array(toConv)
-        whereDot = np.where(toConv == '.')[0]
-        whereDot = str(whereDot).replace("[", "")
-        whereDot = str(whereDot).replace("]", "")
-        whereDot = int(whereDot)
-        toConv = toConv[:whereDot + 2]
-        toConv = np.ndarray.tolist(toConv)
-        toConv = ''.join(toConv)
-        return float(toConv)
-
     def toDouble(toConv):
         """Converts input into a double with proper round-up"""
         toConv = str(toConv)
@@ -60,12 +44,14 @@ class utils:
                 savePos = pos
                 toConv = list(toConv)
                 if float(toConv[savePos + 1]) + 1 >= 10:
-                    #toConv = list(toConv)
-                    toConv[savePos] = int(toConv[savePos]) + 1
+                    if toConv[savePos] == '9':
+                        toConv[savePos - 2] = int(toConv[savePos - 2]) + 1
+                        toConv[savePos] = 0
+                    else:
+                        toConv[savePos] = int(toConv[savePos]) + 1
                     toConv[savePos + 1] = 0
                 else:
                     if float(toConv[savePos + 2]) >= 5:
-                        #toConv = list(toConv)
                         toConv[savePos + 1] = int(toConv[savePos + 1]) + 1
                 toConv = toConv[:savePos + 2]
                 toConv = ''.join(str(y) for y in toConv)
@@ -76,44 +62,6 @@ class utils:
             for candidate in chain.from_iterable(product(chSet, repeat=i)
             for i in range(1, maxleng + 1)))
 
-class fileUtils:
-
-    def savePassword(toSave, saveName: str):
-        """Saves password into '.pass' file."""
-        log.toLog(f"Saving to: {saveName}")
-        if os.path.exists('passwords/' + saveName + '.pass'):
-            log.toLog(f"{saveName} save name is used.")
-            print("Password name is used! Use update function instead!")
-            return "Password name is used!"
-        else:
-            log.toLog(f"{saveName} saved")
-            f = open('passwords/' + saveName + '.pass', 'w')
-            f.write(str(toSave))
-            f.close()
-
-    def updatePassword(toSave, saveName):
-        """Updates saved password file with new one"""
-        log.toLog(f"Updating save: {saveName}")
-        if not os.path.exists('passwords/' + saveName + '.pass'):
-            log.toLog(f"{saveName} save doesn't exist")
-            print("File doesn't exist! Use save function instead!")
-            return "File doesn't exist!"
-        else:
-            log.toLog(f"{saveName} save updated")
-            f = open('passwords/' + saveName + '.pass', 'w')
-            f.write(str(toSave))
-            f.close()
-
-    def deletePassword(delName):
-        """Deletes saved password file"""
-        log.toLog(f"Deleting save: {delName}")
-        if not os.path.exists('passwords/' + delName + '.pass'):
-            log.toLog(f"{delName} save doesn't exist")
-            print("File doesn't exist! Password should exist lol")
-            return "File doesn't exist!"
-        else:
-            os.remove('passwords/' + delName + '.pass')
-            log.toLog(f"{delName} is deleted")
 
 class passwordGen:
     def genInBase64(leng: int):
@@ -132,7 +80,6 @@ class passwordGen:
             if len(base64Conv) > leng:
                 for i in range(len(base64Conv) - leng):
                     base64Conv = base64Conv[:-1]
-            #base64Conv = ''.join(base64Conv)
 
         return base64Conv
     
@@ -196,47 +143,6 @@ class passwordGen:
                 posArrayStr = posArrayStr[:-1]
             
         return posArrayStr
-class crypting:
-    
-    def toBase64(toConv):
-        """Converts input into Base64 format"""
-        toConv = str(base64.b64encode(toConv))
-        return toConv
-
-    def toBase16(toConv):
-        toConv = str(base64.b16encode(toConv))
-        return toConv
-
-    def keyGen():
-        if not os.path.exists('passwords/keyGen'):
-            f = open('passwords/keyGen', 'wb')
-            f.write(fnet.generate_key())
-            f.close()
-            #print(dt.now().strftime("[%H:%M:%S]") + " Generated key")
-            log.toLog("Generated key")
-            return True
-        else:
-            #print(dt.now().strftime("[%H:%M:%S]") + " Key is already generated!")
-            log.toLog("Key is already generated!")
-            return False
-
-    def updKey():
-        print("This will completly overwrite you current generated key, you will loose access to all of your saved passwords\nProceed?")
-        ans = input("[Y/n]: ")
-        if ans == 'Y':
-            print("Overwriting key...")
-            f = open('passwords/keyGen', 'wb')
-            f.write(fnet.generate_key())
-            f.close()
-            log.toLog("Key was overwritten!")
-
-        elif ans == 'n':
-            print("Canceled.")
-            log.toLog("Key overwrite canceled.")
-        
-        else:
-            print(f"There's no {ans} option, reverting operation.")
-            log.toLog("Key overwrite canceled. (Wrong option chosen)")
 class percentage:
 
     def AinB(a, b):
