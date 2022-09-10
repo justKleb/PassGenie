@@ -23,16 +23,18 @@ def settings():
         system('cpg_settings.exe 1')
     except:
         system('cpg_settings.py 1')
-#settings()
 
-preLoadCFG = open('./settings.json')
-if not path.exists('./settings.json') or (path.exists('./settings.json') and preLoadCFG.read() == ''):
+
+if not path.exists('./settings.json'):
     configFile = open('settings.json', 'w')
     fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "Customizable Password Generator","background": "#110f1f","drawWindow": False}})
     configFile.write(fillEmptyConfig)
     configFile.close()
-
-preLoadCFG.close()
+afterwardCheck = open('./settings.json', 'w+')
+if path.exists('./settings.json') and afterwardCheck.read() == '':
+    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "Customizable Password Generator","background": "#110f1f","drawWindow": False}})
+    afterwardCheck.write(fillEmptyConfig)
+    afterwardCheck.close()
 cfg = []
 def cfgGet():
     settingsFile = open('./settings.json')
@@ -45,10 +47,6 @@ def cfgGet():
     log.toLog(f"Settings: {', '.join(toLogSETTINGS)}")
 
 cfgGet()
-
-#pU.brute(pG.genInBase64(10), 1)
-
-#print(pG.genRandomLetters(1000000))
 
 if cfg[1]:
     log.toLog("Launch took %s seconds" % (time.time() - start))
