@@ -1,37 +1,26 @@
 import random
 import base64
 import string
-from ctypes import windll, wintypes, byref
+#from ctypes import windll, wintypes, byref
 import time
 from datetime import datetime as dt
 from itertools import product, chain
 
-class log:
+def toLog(toWrite):
+    log = open('run/log.log', 'a')
+    log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
+    log.close()
 
-    def toLog(toWrite):
-        log = open('run/log.log', 'a')
-        log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
+def clearLog():
+    try:
+        log = open('run/log.log', 'w')
+        log.write('')
         log.close()
-    
-    def clearLog():
-        try:
-            log = open('run/log.log', 'w')
-            log.write('')
-            log.close()
-        except:
-            print("Couldn't open the log file")
+    except:
+        print("Couldn't open the log file")
+        raise FileExistsError("Log file not existing")
 
 class utils:
-
-    def getCursorPosX():
-        cursor = wintypes.POINT()
-        windll.user32.GetCursorPos(byref(cursor))
-        return cursor.x
-    
-    def getCursorPosY():
-        cursor = wintypes.POINT()
-        windll.user32.GetCursorPos(byref(cursor))
-        return cursor.y
 
     def toDouble(toConv):
         """Converts input into a double with proper round-up"""
@@ -98,7 +87,7 @@ class passwordGen:
         """Generates specified amount of randomly generated numbers
 
         Args:
-        First: Specifiy Length (int)"""
+        First: Specify Length (int)"""
         nums = []
         for x in range(leng):
             nums.append(random.randint(0,9))
@@ -110,7 +99,7 @@ class passwordGen:
         """Generates specified amount of randomly generated letters
         
         Args:
-        First: Specifiy Length (int)"""
+        First: Specify Length (int)"""
         lets = []
         letsBase = list(string.ascii_lowercase)
         for x in range(leng):
@@ -118,35 +107,11 @@ class passwordGen:
             if len(lets) == leng:
                 convStr = ''.join(lets)
         return convStr
-
-    def genViaMouse(leng: int):
-        """Generates specified amount of randomly generated letters using mouse coordinates.\n
-        Takes (length ÷ 10) seconds to generate.\n
-        Move mouse while generating, since it's based on it's coordinates, if mouse isn't moving - after 6 characters numbers are going to repeat.
-        
-        Args:
-        First: Specifiy Length (int)"""
-        posArray = ['']
-        for i in range(leng):
-            if len(posArray) >= 2:
-                while utils.getCursorPosY() == posArray[-1]:
-                    l = 0
-                while utils.getCursorPosX() == posArray[-2]:
-                    l = 0
-            x = utils.getCursorPosX()
-            y = utils.getCursorPosY()
-            posArray.append(x)
-            posArray.append(y)
-        posArrayStr = ''.join(str(i) for i in posArray)
-        if len(posArray) > leng:
-            for i in range(len(posArrayStr) - leng):
-                posArrayStr = posArrayStr[:-1]
-            
-        return posArrayStr
+    
 class percentage:
 
     def AinB(a, b):
-        """Returns how much percents is 'a' from 'b'"""
+        """Returns how many percents is 'a' from 'b'"""
         return (a / b) * 100
 
     def fromA(a, b):
@@ -162,11 +127,11 @@ class passwordUtils:
         """Simulates real brute-force attack on password, returns True if password did get cracked, False if didn't."""
         syms = str(list(string.ascii_lowercase) + list(string.ascii_uppercase) + list("""1234567890 =-_+/?\|'";:><,.*&7^%$#@!()[]{} """))
         start = time.time()
-        log.toLog("Starting password testing")
+        toLog("Starting password testing")
         for attempt in utils.allVars(syms, 10):
             if attempt == toTest:
-                log.toLog(f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes.")
+                toLog(f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes.")
                 return False, f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes"
             if abs((time.time() - start) - timeInMinutes * 60) <= 0.1:
-                log.toLog("That takes longer than specified, password check completed. Password wasn't cracked")
+                toLog("That takes longer than specified, password check completed. Password wasn't cracked")
                 return True, f"That takes longer than specified, password check completed. Password wasn't cracked"

@@ -1,9 +1,11 @@
-__pycache__/
-passwords/
+
 test.py
+*.exe
+*.bin
+__pycache__/
 run/
 *.build/
 *.dist/
 *.onefile-build/
-*.exe
 images/
+/.idea

@@ -1,6 +1,6 @@
 import json
 import time
-from utils.cpg_utils import log
+from utils.cpg_utils import clearLog, toLog
 from utils.cpg_utils import passwordUtils as pU
 from utils.cpg_utils import passwordGen as pG
 from utils.cpg_utils import utils
@@ -12,34 +12,38 @@ import pyperclip
 if not path.exists('run/'):
     mkdir('run')
 
-log.clearLog()
+clearLog()
 start = time.time()
 
-RED   = "\033[1;31m"  
-BLUE  = "\033[1;34m"
-CYAN  = "\033[1;36m"
+RED = "\033[1;31m"
+BLUE = "\033[1;34m"
+CYAN = "\033[1;36m"
 GREEN = "\033[0;32m"
 RESET = "\033[0;0m"
-BOLD    = "\033[;1m"
+BOLD = "\033[;1m"
+
 
 def settings():
-    try:
-        system('cpg_settings.exe 1')
-    except:
-        system('cpg_settings.py 1')
+    NotImplemented
 
 
 if not path.exists('./settings.json'):
     configFile = open('settings.json', 'w')
-    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "empty","background": "#110f1f","drawWindow": False}})
+    fillEmptyConfig = json.dumps({"Settings": {"runTimeTimer": True, "launchTimeTimer": True,
+                                               "attemptKeyGenOnStart": False, "appIcon": "icon.ico",
+                                               "appTitle": "empty", "background": "#110f1f", "drawWindow": False}})
     configFile.write(fillEmptyConfig)
     configFile.close()
 afterwardCheck = open('./settings.json', 'w+')
 if path.exists('./settings.json') and afterwardCheck.read() == '':
-    fillEmptyConfig = json.dumps({"Settings":{"runTimeTimer": True,"launchTimeTimer": True,"attemptKeyGenOnStart": False,"appIcon": "icon.ico","appTitle": "empty","background": "#110f1f","drawWindow": False}})
+    fillEmptyConfig = json.dumps({"Settings": {"runTimeTimer": True, "launchTimeTimer": True,
+                                               "attemptKeyGenOnStart": False, "appIcon": "icon.ico",
+                                               "appTitle": "empty", "background": "#110f1f", "drawWindow": False}})
     afterwardCheck.write(fillEmptyConfig)
     afterwardCheck.close()
 cfg = []
+
+
 def cfgGet():
     settingsFile = open('./settings.json')
     settings = json.load(settingsFile)
@@ -48,12 +52,13 @@ def cfgGet():
     for i in settings["Settings"]:
         toLogSETTINGS.append(f'{i} is set to {settings["Settings"][i]}\n    ')
         cfg.append(settings["Settings"][i])
-    log.toLog(f"Settings: {', '.join(toLogSETTINGS)}")
+    toLog(f"Settings: {', '.join(toLogSETTINGS)}")
+
 
 cfgGet()
 
 if cfg[1]:
-    log.toLog("Launch took %s seconds" % utils.toDouble((time.time() - start)+0.001))
+    toLog("Launch took %s seconds" % utils.toDouble((time.time() - start) + 0.001))
 
 print(f"{RED}CPG - 0.1a{RESET}")
 print(f"{CYAN}/help{RESET} for commands!\n")
@@ -73,17 +78,17 @@ while True:
     elif inp == gens[3]:
         current_pass.append(pG.mirror(current_pass[-1]))
     elif inp == '/passwordEnd':
-        def menu(title, classes, color = 'white'):
+        def menu(title, classes, color='white'):
             def char(stdscr, ):
                 attrs = {}
                 opt = {
-                    1:'red',
-                    2:'green',
-                    3:'yellow',
-                    4:'blue',
-                    5:'magenta',
-                    6:'cyan',
-                    7:'white'
+                    1: 'red',
+                    2: 'green',
+                    3: 'yellow',
+                    4: 'blue',
+                    5: 'magenta',
+                    6: 'cyan',
+                    7: 'white'
                 }
                 col = {v: k for k, v in opt.items()}
                 bg = curses.COLOR_BLACK
@@ -114,8 +119,12 @@ while True:
                     elif c == curses.KEY_DOWN and option < len(classes) - 1:
                         option += 1
                 return option
+
             return crs.wrapper(char)
-        ans = menu('\nPassword have been made. Please choose an option, what to do now?', ['Copy to clipboard','Print-out here', 'Exit without saving'], 'magenta')
+
+
+        ans = menu('\nPassword have been made. Please choose an option, what to do now?',
+                   ['Copy to clipboard', 'Print-out here', 'Exit without saving'], 'magenta')
         if ans == 0:
             pyperclip.copy(''.join(current_pass))
         elif ans == 1:
@@ -141,7 +150,7 @@ while True:
         time.sleep(1)
         break
     elif inp == '/help':
-        print(f"""\n{BLUE}Currently aviable commands:{RESET}
+        print(f"""\n{BLUE}Currently available commands:{RESET}
         {CYAN}/ranSyms{RESET} - Generates specified amount of random symbols
         {CYAN}/ranNums{RESET} - Generates specified amount of random numbers
         {CYAN}/ranLetters{RESET} - Generates specified amount of random letters
@@ -149,20 +158,21 @@ while True:
         {CYAN}/passwordEnd{RESET} - Ends password creation process with options
         {CYAN}/passTest{RESET} - Test your password on a "brute-force"-like attack
         {CYAN}/settings{RESET} - Open settings dialog
-        {CYAN}/exit{RESET} - Exit the programm without saving
+        {CYAN}/exit{RESET} - Exit the program without saving
         {CYAN}/help{RESET} - Show this message
         {RED}Just type{RESET} to add your stuff in password\n""")
     elif inp == '/passTest':
-        is_cracked, string = pU.brute(''.join(current_pass), int(input(f'{RED}Limit time for testing (In minutes) : {RESET}')))
+        is_cracked, string = pU.brute(''.join(current_pass),
+                                      int(input(f'{RED}Limit time for testing (In minutes) : {RESET}')))
         print(string)
     elif inp == '/settings':
         settings()
     else:
         current_pass.append(inp)
-    
 
 if cfg[0]:
     if time.time() - start >= 60:
-        log.toLog(f"Program was running for {int((time.time() - start)//60)} minutes and {utils.toDouble((time.time() - start) - (((time.time() - start)//60) * 60))} seconds")
+        toLog(
+            f"Program was running for {int((time.time() - start) // 60)} minutes and {utils.toDouble((time.time() - start) - (((time.time() - start) // 60) * 60))} seconds")
     else:
-        log.toLog(f"Program was running for {utils.toDouble(time.time() - start)} seconds")
+        toLog(f"Program was running for {utils.toDouble(time.time() - start)} seconds")
