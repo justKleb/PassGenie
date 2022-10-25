@@ -1,10 +1,10 @@
 import random
 import base64
 import string
-#from ctypes import windll, wintypes, byref
 import time
 from datetime import datetime as dt
 from itertools import product, chain
+from os import mkdir, path, listdir
 
 def toLog(toWrite):
     log = open('run/log.log', 'a')
@@ -22,7 +22,7 @@ def clearLog():
 
 class utils:
 
-    def toDouble(toConv):
+    def toDouble(toConv: float):
         """Converts input into a double with proper round-up"""
         toConv = str(toConv)
         whereDot = 0
@@ -123,9 +123,19 @@ class percentage:
         return a * (100/b)
 
 class passwordUtils:
+
+    def savePass(toSave: str, passName: str):
+        try:
+            mkdir('./passwords')
+            toLog('Passwords dir. isn`t present, created one')
+        except:
+            toLog('Passwords dir. is already present, canceled creation process')
+
     def brute(toTest: str, timeInMinutes: float):
         """Simulates real brute-force attack on password, returns True if password did get cracked, False if didn't."""
-        syms = str(list(string.ascii_lowercase) + list(string.ascii_uppercase) + list("""1234567890 =-_+/?\|'";:><,.*&7^%$#@!()[]{} """))
+        syms = str(list(string.ascii_lowercase) +
+                   list(string.ascii_uppercase) +
+                   list("""1234567890 =-_+/?\|'";:><,.*&7^%$#@!()[]{} """))
         start = time.time()
         toLog("Starting password testing")
         for attempt in utils.allVars(syms, 10):

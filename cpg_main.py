@@ -46,12 +46,12 @@ cfg = []
 
 def cfgGet():
     settingsFile = open('./settings.json')
-    settings = json.load(settingsFile)
+    setts = json.load(settingsFile)
     settingsFile.close()
     toLogSETTINGS = []
-    for i in settings["Settings"]:
-        toLogSETTINGS.append(f'{i} is set to {settings["Settings"][i]}\n    ')
-        cfg.append(settings["Settings"][i])
+    for i in setts["Settings"]:
+        toLogSETTINGS.append(f'{i} is set to {setts["Settings"][i]}\n    ')
+        cfg.append(setts["Settings"][i])
     toLog(f"Settings: {', '.join(toLogSETTINGS)}")
 
 
@@ -60,119 +60,3 @@ cfgGet()
 if cfg[1]:
     toLog("Launch took %s seconds" % utils.toDouble((time.time() - start) + 0.001))
 
-print(f"{RED}CPG - 0.1a{RESET}")
-print(f"{CYAN}/help{RESET} for commands!\n")
-gens = ['/ranSyms', '/ranNums', '/ranLetters', '/mirrorPrev']
-current_pass = []
-while True:
-    inp = input(f"{CYAN}Add to password(STRING/KEYWORD): {RESET}")
-    if inp == gens[0]:
-        symbol_amount = input(f'{GREEN}Amount(INT): {RESET}')
-        current_pass.append(pG.genInBase64(int(symbol_amount)))
-    elif inp == gens[1]:
-        symbol_amount = input(f'{GREEN}Amount(INT): {RESET}')
-        current_pass.append(pG.genRandomNums(int(symbol_amount)))
-    elif inp == gens[2]:
-        symbol_amount = input(f'{GREEN}Amount(INT): {RESET}')
-        current_pass.append(pG.genRandomLetters(int(symbol_amount)))
-    elif inp == gens[3]:
-        current_pass.append(pG.mirror(current_pass[-1]))
-    elif inp == '/passwordEnd':
-        def menu(title, classes, color='white'):
-            def char(stdscr, ):
-                attrs = {}
-                opt = {
-                    1: 'red',
-                    2: 'green',
-                    3: 'yellow',
-                    4: 'blue',
-                    5: 'magenta',
-                    6: 'cyan',
-                    7: 'white'
-                }
-                col = {v: k for k, v in opt.items()}
-                bg = curses.COLOR_BLACK
-                curses.init_pair(1, 7, bg)
-                attrs['normal'] = curses.color_pair(1)
-                curses.init_pair(2, col[color], bg)
-                attrs['highlighted'] = curses.color_pair(2)
-                c = 0
-                option = 0
-                while c != 10:
-
-                    stdscr.erase()
-
-                    stdscr.addstr(f"{title}\n", curses.color_pair(1))
-
-                    for i in range(len(classes)):
-                        if i == option:
-                            attr = attrs['highlighted']
-                        else:
-                            attr = attrs['normal']
-
-                        stdscr.addstr(f'> ', attr)
-                        stdscr.addstr(f'{classes[i]}' + '\n', attr)
-                    c = stdscr.getch()
-
-                    if c == curses.KEY_UP and option > 0:
-                        option -= 1
-                    elif c == curses.KEY_DOWN and option < len(classes) - 1:
-                        option += 1
-                return option
-
-            return crs.wrapper(char)
-
-
-        ans = menu('\nPassword have been made. Please choose an option, what to do now?',
-                   ['Copy to clipboard', 'Print-out here', 'Exit without saving'], 'magenta')
-        if ans == 0:
-            pyperclip.copy(''.join(current_pass))
-        elif ans == 1:
-            print('\n' + ''.join(current_pass) + '\n')
-        elif ans == 2:
-            print(f"This will remove {RED}EVERYTHING{RESET} added/generated in password!")
-            f = input('Proceed? [Yes/no] : ')
-            if f == 'Yes':
-                current_pass = []
-                print('Done.')
-                break
-            elif f == 'no':
-                a = input("Ok! What to do with it then? [print/copy] : ")
-                if a == "print":
-                    print(''.join(current_pass))
-                elif a == "copy":
-                    pyperclip.copy(''.join(current_pass))
-                else:
-                    print("Didn't recognize option. Aborting.")
-                    break
-    elif inp == '/exit':
-        print('Bye!')
-        time.sleep(1)
-        break
-    elif inp == '/help':
-        print(f"""\n{BLUE}Currently available commands:{RESET}
-        {CYAN}/ranSyms{RESET} - Generates specified amount of random symbols
-        {CYAN}/ranNums{RESET} - Generates specified amount of random numbers
-        {CYAN}/ranLetters{RESET} - Generates specified amount of random letters
-        {CYAN}/mirrorPrev{RESET} - Mirrors previous part of password
-        {CYAN}/passwordEnd{RESET} - Ends password creation process with options
-        {CYAN}/passTest{RESET} - Test your password on a "brute-force"-like attack
-        {CYAN}/settings{RESET} - Open settings dialog
-        {CYAN}/exit{RESET} - Exit the program without saving
-        {CYAN}/help{RESET} - Show this message
-        {RED}Just type{RESET} to add your stuff in password\n""")
-    elif inp == '/passTest':
-        is_cracked, string = pU.brute(''.join(current_pass),
-                                      int(input(f'{RED}Limit time for testing (In minutes) : {RESET}')))
-        print(string)
-    elif inp == '/settings':
-        settings()
-    else:
-        current_pass.append(inp)
-
-if cfg[0]:
-    if time.time() - start >= 60:
-        toLog(
-            f"Program was running for {int((time.time() - start) // 60)} minutes and {utils.toDouble((time.time() - start) - (((time.time() - start) // 60) * 60))} seconds")
-    else:
-        toLog(f"Program was running for {utils.toDouble(time.time() - start)} seconds")
