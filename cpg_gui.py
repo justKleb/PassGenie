@@ -2,6 +2,7 @@ import gi; gi.require_version("Gtk", "3.0")
 import pyclip
 from gi.repository import Gtk as gtk
 from utils.cpg_utils import passwordGen as pg
+from utils.cpg_utils import toLog
 
 cmds = ['%rn', '%rl', '%rs', '%m', '%mp']
 
@@ -10,35 +11,42 @@ count = 0
 class Display(gtk.Window):
 
     def passgen(self, widjet):
+        toLog("Password generation initiated via GUI")
         global count
         self.passdone.hide()
         self.pbar.set_fraction(0)
         toGen = self.usrinp.get_text()
         inp = toGen.split(' ')
         partPerc = (100 / len(inp)) / 100
-        for i in range(len(inp)):
+        for i in range(linp := len(inp)):
             pbarVal = self.pbar.get_fraction()
             self.pbar.set_fraction(pbarVal + partPerc)
+            if i >= linp: break
             if inp[i]:
                 if inp[i] == cmds[0]:
                     inp[i] = pg.genRandomNums(int(inp[i + 1]))
-                    del inp[i + 1]
+                    del inp[i + 1]; linp -= 1
                 elif inp[i] == cmds[1]:
                     inp[i] = pg.genRandomLetters(int(inp[i + 1]))
-                    del inp[i + 1]
+                    del inp[i + 1]; linp -= 1
                 elif inp[i] == cmds[2]:
                     inp[i] = pg.genRandomSyms(int(inp[i + 1]))
-                    del inp[i + 1]
+                    del inp[i + 1]; linp -= 1
                 elif inp[i] == cmds[3]:
                     inp[i] = pg.mirror(inp[i - 1])
+        toLog("Password generation complete")
+        self.usrinp.set_text(passend := ''.join(inp))
 
         def copy(s):
-            pyclip.copy(''.join(inp))
+            toLog("Copy to clipboard option was chosen")
+            pyclip.copy(passend)
 
         def write(s):
+            toLog("Write to file option was chosen [WIP]")
             pass
 
         def cancel(s):
+            toLog("Clear option was chosen")
             global inp
             inp = None
             self.pbar.set_fraction(0)
@@ -50,6 +58,7 @@ class Display(gtk.Window):
             self.copy.connect("clicked", copy)
             self.writeout.connect("clicked", write)
         self.passdone.show()
+
         count = 1
 
 
@@ -78,10 +87,7 @@ class Display(gtk.Window):
         self.passdone.hide()
         win.show()
 
-        #ver_label = self.builder.get_object("ver")
 
 
-if __name__ == '__main__':
-    m = Display()
-    #m.set_title("PassGin")
-    gtk.main()
+m = Display()
+gtk.main()

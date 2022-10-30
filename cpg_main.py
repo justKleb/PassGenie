@@ -3,13 +3,12 @@ import time
 from utils.cpg_utils import clearLog, toLog
 from utils.cpg_utils import utils
 from os import path, mkdir
-from cpg_gui import Display as gui
 
 if not path.exists('run/'):
     mkdir('run')
 
 clearLog()
-start = time.time()
+start = time.perf_counter()
 
 RED = "\033[1;31m"
 BLUE = "\033[1;34m"
@@ -38,10 +37,9 @@ if path.exists('./settings.json') and afterwardCheck.read() == '':
                                                "appTitle": -1, "background": "#110f1f", "drawWindow": True}})
     afterwardCheck.write(fillEmptyConfig)
     afterwardCheck.close()
-cfg = []
-
 
 def cfgGet():
+    cfg = []
     settingsFile = open('./settings.json')
     setts = json.load(settingsFile)
     settingsFile.close()
@@ -50,13 +48,17 @@ def cfgGet():
         toLogSETTINGS.append(f'{i} is set to {setts["Settings"][i]}\n    ')
         cfg.append(setts["Settings"][i])
     toLog(f"Settings: {', '.join(toLogSETTINGS)}")
+    return cfg
 
 
-cfgGet()
+cfg = cfgGet()
 
 if cfg[1]:
-    toLog("Launch took %s seconds" % utils.toDouble((time.time() - start) + 0.001))
+    toLog("Launch took %s seconds" % utils.toDouble((time.perf_counter() - start) + 0.001))
 
 if cfg[6]:
-    #gui().__init__()
+
     import cpg_gui
+
+    if cfg[0]:
+        toLog("Program was running for %s seconds" % utils.toDouble((time.perf_counter() - start) + 0.001))
