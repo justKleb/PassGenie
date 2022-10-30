@@ -7,5 +7,4 @@ run/
 *.build/
 *.dist/
 *.onefile-build/
-images/
 /.idea

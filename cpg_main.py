@@ -1,13 +1,9 @@
 import json
 import time
 from utils.cpg_utils import clearLog, toLog
-from utils.cpg_utils import passwordUtils as pU
-from utils.cpg_utils import passwordGen as pG
 from utils.cpg_utils import utils
-from os import path, system, mkdir
-import _curses as curses
-import curses as crs
-import pyperclip
+from os import path, mkdir
+from cpg_gui import Display as gui
 
 if not path.exists('run/'):
     mkdir('run')
@@ -30,16 +26,16 @@ def settings():
 if not path.exists('./settings.json'):
     configFile = open('settings.json', 'w')
     fillEmptyConfig = json.dumps({"Settings": {"runTimeTimer": True, "launchTimeTimer": True,
-                                               "attemptKeyGenOnStart": False, "appIcon": "icon.ico",
-                                               "appTitle": "empty", "background": "#110f1f", "drawWindow": False}})
+                                               "attemptKeyGenOnStart": False, "appIcon": -1,
+                                               "appTitle": -1, "background": "#110f1f", "drawWindow": True}})
     configFile.write(fillEmptyConfig)
     configFile.close()
 afterwardCheck = open('./settings.json', 'w+')
 
 if path.exists('./settings.json') and afterwardCheck.read() == '':
     fillEmptyConfig = json.dumps({"Settings": {"runTimeTimer": True, "launchTimeTimer": True,
-                                               "attemptKeyGenOnStart": False, "appIcon": "icon.ico",
-                                               "appTitle": "empty", "background": "#110f1f", "drawWindow": False}})
+                                               "attemptKeyGenOnStart": False, "appIcon": -1,
+                                               "appTitle": -1, "background": "#110f1f", "drawWindow": True}})
     afterwardCheck.write(fillEmptyConfig)
     afterwardCheck.close()
 cfg = []
@@ -61,3 +57,6 @@ cfgGet()
 if cfg[1]:
     toLog("Launch took %s seconds" % utils.toDouble((time.time() - start) + 0.001))
 
+if cfg[6]:
+    #gui().__init__()
+    import cpg_gui

@@ -3,20 +3,20 @@
 
 Copyright (C) justKleb <https://github.com/justKleb>
 
-This file is part of PassGin.
+This file is part of PassGenie.
 
-PassGin is free software: you can redistribute it and/or modify
+PassGenie is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-PassGin is distributed in the hope that it will be useful,
+PassGenie is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with PassGin.  If not, see <http://www.gnu.org/licenses/>.
+along with PassGenie.  If not, see <http://www.gnu.org/licenses/>.
 
 Author: justKleb
 
@@ -24,154 +24,137 @@ Author: justKleb
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <!-- interface-license-type gplv3 -->
-  <!-- interface-name PassGin -->
+  <!-- interface-name PassGenie -->
   <!-- interface-copyright justKleb <https://github.com/justKleb> -->
   <!-- interface-authors justKleb -->
   <object class="GtkWindow" id="win">
     <property name="can-focus">False</property>
-    <property name="default-width">1080</property>
-    <property name="default-height">720</property>
+    <property name="resizable">False</property>
     <child>
-      <!-- n-columns=10 n-rows=4 -->
-      <object class="GtkGrid" id="grid">
+      <object class="GtkBox" id="main">
+        <property name="width-request">720</property>
+        <property name="height-request">460</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkLabel" id="ver">
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">ver</property>
+            <property name="opacity">0.38039215686274508</property>
+            <property name="margin-end">273</property>
+            <property name="label" translatable="yes">Commands:
+	%rn [number]  --  Inserts specified amount of random numbers
+	%rl [number]  --  Inserts specified amount of random letters
+	%rs [number]  --  Inserts specified amount of random symbols
+	%m  --  Mirrors previous part of password</property>
           </object>
           <packing>
-            <property name="left-attach">9</property>
-            <property name="top-attach">3</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="padding">5</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">button</property>
+          <object class="GtkEntry" id="usrinp">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="placeholder-text" translatable="yes">Insert commands + your parts to generate a strong password!</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="padding">10</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="genpass">
+            <property name="label" translatable="yes">Generate</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="margin-top">150</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="padding">10</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkProgressBar" id="pbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="valign">start</property>
+            <property name="vexpand">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="padding">5</property>
+            <property name="position">3</property>
+          </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
+          <object class="GtkBox" id="passdone">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkButton" id="writeout">
+                <property name="label" translatable="yes">Write out in file</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">5</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="copy">
+                <property name="label" translatable="yes">Copy to clipboard</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="padding">5</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel">
+                <property name="label" translatable="yes">Clear</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="padding">5</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="padding">5</property>
+            <property name="position">4</property>
+          </packing>
         </child>
       </object>
     </child>

@@ -56,11 +56,12 @@ class utils:
 
 
 class passwordGen:
-    def genInBase64(leng: int):
-        """Generates specified amount of randomly generated symbols (Numbers and letters)
-        
-        Args:
-        First: Specify Length (int)"""
+    def genRandomSyms(leng: int):
+        """Generates specified amount of randomly generated symbols (Numbers and letters)"""
+        if type(leng) != int:
+            try:
+                leng = int(leng)
+            except ValueError: return "wrongType"
         toConv = []
         base64Conv = ""
         for x in range(leng):
@@ -76,21 +77,19 @@ class passwordGen:
         return base64Conv
 
     def mirror(toMirror: str):
-        """Mirrors the input and returns it
-
-        Args:
-        First: String to mirror"""
+        """Mirrors the input and returns it"""
         a = list(toMirror)
-        out = []
-        for x in range(len(a)):
-            out.append(a[(len(toMirror) - 1) - x])
-        return ''.join(out)
+        a.reverse()
+        """for x in range(len(a)):
+            out.append(a[(len(toMirror) - 1) - x])"""  # Legacy
+        return ''.join(a)
 
     def genRandomNums(leng: int):
-        """Generates specified amount of randomly generated numbers
-
-        Args:
-        First: Specify Length (int)"""
+        """Generates specified amount of randomly generated numbers"""
+        if type(leng) != int:
+            try:
+                leng = int(leng)
+            except ValueError: return "wrongType"
         nums = []
         for x in range(leng):
             nums.append(srandom.randint(0, 9))
@@ -99,10 +98,11 @@ class passwordGen:
         return convStr
 
     def genRandomLetters(leng: int):
-        """Generates specified amount of randomly generated letters
-        
-        Args:
-        First: Specify Length (int)"""
+        """Generates specified amount of randomly generated letters"""
+        if type(leng) != int:
+            try:
+                leng = int(leng)
+            except ValueError: return "wrongType"
         lets = []
         letsBase = list(string.ascii_lowercase)
         for x in range(leng):
