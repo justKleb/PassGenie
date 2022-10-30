@@ -26,7 +26,7 @@ if not path.exists('./settings.json'):
     configFile = open('settings.json', 'w')
     fillEmptyConfig = json.dumps({"Settings": {"runTimeTimer": True, "launchTimeTimer": True,
                                                "attemptKeyGenOnStart": False, "appIcon": -1,
-                                               "appTitle": -1, "background": "#110f1f", "drawWindow": True}})
+                                               "appTitle": -1, "background": "#110f1f", "drawWindow": True, "DEV": False}})
     configFile.write(fillEmptyConfig)
     configFile.close()
 afterwardCheck = open('./settings.json', 'w+')
@@ -34,7 +34,7 @@ afterwardCheck = open('./settings.json', 'w+')
 if path.exists('./settings.json') and afterwardCheck.read() == '':
     fillEmptyConfig = json.dumps({"Settings": {"runTimeTimer": True, "launchTimeTimer": True,
                                                "attemptKeyGenOnStart": False, "appIcon": -1,
-                                               "appTitle": -1, "background": "#110f1f", "drawWindow": True}})
+                                               "appTitle": -1, "background": "#110f1f", "drawWindow": True, "DEV": False}})
     afterwardCheck.write(fillEmptyConfig)
     afterwardCheck.close()
 
@@ -57,8 +57,10 @@ if cfg[1]:
     toLog("Launch took %s seconds" % utils.toDouble((time.perf_counter() - start) + 0.001))
 
 if cfg[6]:
-
-    import cpg_gui
-
+    if not cfg[7]:
+        import cpg_gui
+    else:
+        with open('./passgenie-gui') as gui_exec:
+            exec(gui_exec.read())
     if cfg[0]:
         toLog("Program was running for %s seconds" % utils.toDouble((time.perf_counter() - start) + 0.001))
