@@ -35,6 +35,7 @@ if not path.exists('./settings.json'):
     configFile.write(fillEmptyConfig)
     configFile.close()
 afterwardCheck = open('./settings.json', 'w+')
+
 if path.exists('./settings.json') and afterwardCheck.read() == '':
     fillEmptyConfig = json.dumps({"Settings": {"runTimeTimer": True, "launchTimeTimer": True,
                                                "attemptKeyGenOnStart": False, "appIcon": "icon.ico",

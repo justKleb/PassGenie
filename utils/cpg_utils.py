@@ -1,15 +1,17 @@
-import random
+import secrets; srandom = secrets.SystemRandom()
 import base64
 import string
 import time
 from datetime import datetime as dt
 from itertools import product, chain
-from os import mkdir, path, listdir
+from os import mkdir
+
 
 def toLog(toWrite):
     log = open('run/log.log', 'a')
     log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
     log.close()
+
 
 def clearLog():
     try:
@@ -19,6 +21,7 @@ def clearLog():
     except:
         print("Couldn't open the log file")
         raise FileExistsError("Log file not existing")
+
 
 class utils:
 
@@ -48,8 +51,8 @@ class utils:
 
     def allVars(chSet, maxleng):
         return (''.join(candidate)
-            for candidate in chain.from_iterable(product(chSet, repeat=i)
-            for i in range(1, maxleng + 1)))
+                for candidate in chain.from_iterable(product(chSet, repeat=i)
+                                                     for i in range(1, maxleng + 1)))
 
 
 class passwordGen:
@@ -57,11 +60,11 @@ class passwordGen:
         """Generates specified amount of randomly generated symbols (Numbers and letters)
         
         Args:
-        First: Specifiy Length (int)"""
+        First: Specify Length (int)"""
         toConv = []
         base64Conv = ""
         for x in range(leng):
-            toConv.append(random.randint(0,9))
+            toConv.append(srandom.randint(0, 9))
             if len(toConv) == leng:
                 ConvStr = ''.join(str(y) for y in toConv)
                 base64Conv = base64.b64encode(ConvStr.encode('ascii'))
@@ -71,7 +74,7 @@ class passwordGen:
                     base64Conv = base64Conv[:-1]
 
         return base64Conv
-    
+
     def mirror(toMirror: str):
         """Mirrors the input and returns it
 
@@ -80,9 +83,9 @@ class passwordGen:
         a = list(toMirror)
         out = []
         for x in range(len(a)):
-            out.append(a[(len(toMirror) - 1)-x])
+            out.append(a[(len(toMirror) - 1) - x])
         return ''.join(out)
-    
+
     def genRandomNums(leng: int):
         """Generates specified amount of randomly generated numbers
 
@@ -90,7 +93,7 @@ class passwordGen:
         First: Specify Length (int)"""
         nums = []
         for x in range(leng):
-            nums.append(random.randint(0,9))
+            nums.append(srandom.randint(0, 9))
             if len(nums) == leng:
                 convStr = ''.join(str(y) for y in nums)
         return convStr
@@ -103,11 +106,12 @@ class passwordGen:
         lets = []
         letsBase = list(string.ascii_lowercase)
         for x in range(leng):
-            lets.append(letsBase[random.randint(0,25)])
+            lets.append(letsBase[srandom.randint(0, 25)])
             if len(lets) == leng:
                 convStr = ''.join(lets)
         return convStr
-    
+
+
 class percentage:
 
     def AinB(a, b):
@@ -116,11 +120,12 @@ class percentage:
 
     def fromA(a, b):
         """Returns specified percents from 'a' number"""
-        return (a/100) * b
+        return (a / 100) * b
 
     def fromPercent(a, b):
         """Returns number from how much percent is number from it"""
-        return a * (100/b)
+        return a * (100 / b)
+
 
 class passwordUtils:
 
@@ -140,8 +145,8 @@ class passwordUtils:
         toLog("Starting password testing")
         for attempt in utils.allVars(syms, 10):
             if attempt == toTest:
-                toLog(f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes.")
-                return False, f"Cracked in {time.time() - start} seconds or {(time.time() - start)//60} minutes"
+                toLog(f"Cracked in {time.time() - start} seconds or {(time.time() - start) // 60} minutes.")
+                return False, f"Cracked in {time.time() - start} seconds or {(time.time() - start) // 60} minutes"
             if abs((time.time() - start) - timeInMinutes * 60) <= 0.1:
                 toLog("That takes longer than specified, password check completed. Password wasn't cracked")
                 return True, f"That takes longer than specified, password check completed. Password wasn't cracked"
