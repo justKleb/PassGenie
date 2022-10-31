@@ -3,8 +3,9 @@ import pyclip
 from gi.repository import Gtk as gtk
 from utils.cpg_utils import passwordGen as pg
 from utils.cpg_utils import toLog
+import re
 
-cmds = ['%rn', '%rl', '%rs', '%m', '%mp']
+cmds = ['rn', 'rl', 'rs', 'm', 'mp']
 
 count = 0
 
@@ -16,9 +17,36 @@ class Display(gtk.Window):
         self.passdone.hide()
         self.pbar.set_fraction(0)
         toGen = self.usrinp.get_text()
-        inp = toGen.split(' ')
-        partPerc = (100 / len(inp)) / 100
-        for i in range(linp := len(inp)):
+        if len(toGen) != 0: partPerc = (100 / len(toGen)) / 100
+        else: partPerc = 1
+        cmd_regex = "%([a-zA-Z]{1,2}) ([0-9]*?) ?%"
+
+        def check(check, args):
+            pbarVal = self.pbar.get_fraction()
+            self.pbar.set_fraction(pbarVal + partPerc)
+            if check in cmds:
+                if check == cmds[0]:
+                    return pg.genRandomNums(int(args))
+                elif check == cmds[1]:
+                    return pg.genRandomLetters(int(args))
+                elif check == cmds[2]:
+                    return pg.genRandomSyms(int(args))
+                elif check == cmds[3]:
+                    return pg.mirror(toGen)
+        if toGen != '' or None:
+            x = re.findall(cmd_regex, toGen)
+            for j, k in x:
+                y = re.search(cmd_regex, toGen); y = y.group()
+                z = re.search(cmd_regex, toGen); z1, z2 = z.span()
+                to_write = check(j, k)
+                convs = list(toGen)
+                convs[z1:z2] = [to_write]
+                toGen = ''.join(str(i) for i in convs)
+        else:
+            toGen = pg.genRandomSyms(10)
+
+        self.pbar.set_fraction(1)
+        """for i in range(linp := len(inp)):
             pbarVal = self.pbar.get_fraction()
             self.pbar.set_fraction(pbarVal + partPerc)
             if i >= linp: break
@@ -33,13 +61,14 @@ class Display(gtk.Window):
                     inp[i] = pg.genRandomSyms(int(inp[i + 1]))
                     del inp[i + 1]; linp -= 1
                 elif inp[i] == cmds[3]:
-                    inp[i] = pg.mirror(inp[i - 1])
+                    inp[i] = pg.mirror(inp[i - 1])"""
+
         toLog("Password generation complete")
-        self.usrinp.set_text(passend := ''.join(inp))
+        self.password.set_text(toGen)
 
         def copy(s):
             toLog("Copy to clipboard option was chosen")
-            pyclip.copy(passend)
+            pyclip.copy(toGen)
 
         def write(s):
             toLog("Write to file option was chosen [WIP]")
@@ -47,10 +76,11 @@ class Display(gtk.Window):
 
         def cancel(s):
             toLog("Clear option was chosen")
-            global inp
-            inp = None
+            global check
+            check = None
             self.pbar.set_fraction(0)
             self.usrinp.set_text('')
+            self.password.set_text('')
             self.passdone.hide()
 
         if count != 1:
@@ -81,6 +111,7 @@ class Display(gtk.Window):
         self.copy = self.builder.get_object("copy")
         self.usrinp = self.builder.get_object("usrinp")
         self.passdone = self.builder.get_object("passdone")
+        self.password = self.builder.get_object("password")
 
         self.genpass.connect("clicked", self.passgen)
 
