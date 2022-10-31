@@ -33,6 +33,7 @@ class Display(gtk.Window):
                     return pg.genRandomSyms(int(args))
                 elif check == cmds[3]:
                     return pg.mirror(toGen)
+
         if toGen != '' or None:
             x = re.findall(cmd_regex, toGen)
             for j, k in x:
@@ -46,23 +47,6 @@ class Display(gtk.Window):
             toGen = pg.genRandomSyms(10)
 
         self.pbar.set_fraction(1)
-        """for i in range(linp := len(inp)):
-            pbarVal = self.pbar.get_fraction()
-            self.pbar.set_fraction(pbarVal + partPerc)
-            if i >= linp: break
-            if inp[i]:
-                if inp[i] == cmds[0]:
-                    inp[i] = pg.genRandomNums(int(inp[i + 1]))
-                    del inp[i + 1]; linp -= 1
-                elif inp[i] == cmds[1]:
-                    inp[i] = pg.genRandomLetters(int(inp[i + 1]))
-                    del inp[i + 1]; linp -= 1
-                elif inp[i] == cmds[2]:
-                    inp[i] = pg.genRandomSyms(int(inp[i + 1]))
-                    del inp[i + 1]; linp -= 1
-                elif inp[i] == cmds[3]:
-                    inp[i] = pg.mirror(inp[i - 1])"""
-
         toLog("Password generation complete")
         self.password.set_text(toGen)
 
