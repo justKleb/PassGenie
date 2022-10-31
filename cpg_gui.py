@@ -5,7 +5,7 @@ from utils.cpg_utils import passwordGen as pg
 from utils.cpg_utils import toLog
 import re
 
-cmds = ['rn', 'rl', 'rs', 'm', 'mp']
+cmds = ['rn', 'rl', 'rs', 'm', 'rw']
 
 count = 0
 
@@ -19,9 +19,9 @@ class Display(gtk.Window):
         toGen = self.usrinp.get_text()
         if len(toGen) != 0: partPerc = (100 / len(toGen)) / 100
         else: partPerc = 1
-        cmd_regex = "%([a-zA-Z]{1,2}) ([0-9]*?) ?%"
+        cmd_regex = "%([a-zA-Z]{1,2}) *?([0-9]*?) ?%"
 
-        def check(check, args):
+        def check(check, args, pos: tuple):
             pbarVal = self.pbar.get_fraction()
             self.pbar.set_fraction(pbarVal + partPerc)
             if check in cmds:
@@ -32,19 +32,20 @@ class Display(gtk.Window):
                 elif check == cmds[2]:
                     return pg.genRandomSyms(int(args))
                 elif check == cmds[3]:
-                    return pg.mirror(toGen)
+                    return pg.mirror(toGen[:pos[0]])
+                elif check == cmds[4]:
+                    return pg.genRandomWords(int(args))
 
         if toGen != '' or None:
             x = re.findall(cmd_regex, toGen)
             for j, k in x:
-                y = re.search(cmd_regex, toGen); y = y.group()
                 z = re.search(cmd_regex, toGen); z1, z2 = z.span()
-                to_write = check(j, k)
+                to_write = check(j, k, (z1, z2))
                 convs = list(toGen)
                 convs[z1:z2] = [to_write]
                 toGen = ''.join(str(i) for i in convs)
         else:
-            toGen = pg.genRandomSyms(10)
+            toGen = pg.genRandomWords(2) + pg.genRandomSyms(10)
 
         self.pbar.set_fraction(1)
         toLog("Password generation complete")

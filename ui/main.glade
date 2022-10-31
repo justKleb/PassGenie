@@ -51,10 +51,11 @@ Author: justKleb
                 <property name="can-focus">False</property>
                 <property name="opacity">0.38039215686274508</property>
                 <property name="label" translatable="yes">Commands:
-	%rn [number]  --  Inserts specified amount of random numbers
-	%rl [number]  --  Inserts specified amount of random letters
-	%rs [number]  --  Inserts specified amount of random symbols
-	%m  --  Mirrors the password</property>
+	%rn [number]%  --  Inserts specified amount of random numbers
+	%rl [number]%  --  Inserts specified amount of random letters
+	%rs [number]%  --  Inserts specified amount of random symbols
+	%rw [number]%  --  Inserts specified amount of random words
+	%m%  --  Mirrors content behind the command</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -136,12 +137,11 @@ Author: justKleb
             <child>
               <object class="GtkButton" id="writeout">
                 <property name="label" translatable="yes">Write out in file</property>
-                <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="padding">5</property>
                 <property name="position">0</property>

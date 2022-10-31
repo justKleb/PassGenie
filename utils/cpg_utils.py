@@ -111,6 +111,19 @@ class passwordGen:
                 convStr = ''.join(lets)
         return convStr
 
+    def genRandomWords(leng: int):
+        """Generates specified amount of randomly generated words"""
+        if type(leng) != int:
+            try:
+                leng = int(leng)
+            except ValueError:
+                return "wrongType"
+        with open('./res/words.txt', 'r') as words:
+            wlist = words.read().split('\n'); wlist = [i.capitalize() for i in wlist]
+        toReturn = []
+        for i in range(leng):
+            toReturn.append(wlist[srandom.randint(0, len(wlist))])
+        return ''.join(toReturn)
 
 class percentage:
 
