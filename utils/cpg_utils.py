@@ -1,3 +1,4 @@
+import json
 import secrets; srandom = secrets.SystemRandom()
 import base64
 import string
@@ -146,8 +147,13 @@ class passwordUtils:
         try:
             mkdir('./passwords')
             toLog('Passwords dir. isn`t present, created one')
-        except:
+        except FileExistsError:
             toLog('Passwords dir. is already present, canceled creation process')
+
+        with open('./passwords/' + passName + '.json') as savingPass:
+            json.dumps({'name': passName,
+                        'pass': '',
+                        'icon' : ''})
 
     def brute(toTest: str, timeInMinutes: float):
         """Simulates real brute-force attack on password, returns True if password did get cracked, False if didn't."""
