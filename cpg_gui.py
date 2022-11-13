@@ -1,9 +1,18 @@
 import gi; gi.require_version("Gtk", "3.0")
-import pyclip
 from gi.repository import Gtk as gtk
+from gi.repository import Gdk as gdk
 from utils.cpg_utils import passwordGen as pg
-from utils.cpg_utils import toLog
+from utils.cpg_utils import to_log
+import subprocess as sp
 import re
+
+xclip = False
+try:
+    op = sp.run(["xclip", '-h'], capture_output=True, text=True)
+    xclip = True; import pyclip
+except FileNotFoundError:
+    to_log("xclip installation not found, falling back to GTK clipboard", 2)
+    xclip = False
 
 cmds = ['rn', 'rl', 'rs', 'm', 'rw']
 
@@ -12,7 +21,7 @@ count = 0
 class Display(gtk.Window):
 
     def passgen(self, widjet):
-        toLog("Password generation initiated via GUI")
+        to_log("Password generation initiated via GUI")
         global count
         self.passdone.hide()
         self.pbar.set_fraction(0)
@@ -26,15 +35,15 @@ class Display(gtk.Window):
             self.pbar.set_fraction(pbarVal + partPerc)
             if check in cmds:
                 if check == cmds[0]:
-                    return pg.genRandomNums(int(args))
+                    return pg.gen_random_nums(int(args))
                 elif check == cmds[1]:
-                    return pg.genRandomLetters(int(args))
+                    return pg.gen_random_letters(int(args))
                 elif check == cmds[2]:
-                    return pg.genRandomSyms(int(args))
+                    return pg.gen_random_syms(int(args))
                 elif check == cmds[3]:
                     return pg.mirror(toGen[:pos[0]])
                 elif check == cmds[4]:
-                    return pg.genRandomWords(int(args))
+                    return pg.gen_random_words(int(args))
 
         if toGen != '' or None:
             x = re.findall(cmd_regex, toGen)
@@ -45,22 +54,24 @@ class Display(gtk.Window):
                 convs[z1:z2] = [to_write]
                 toGen = ''.join(str(i) for i in convs)
         else:
-            toGen = pg.genRandomWords(2) + pg.genRandomSyms(10)
+            toGen = pg.gen_random_words(2) + pg.gen_random_syms(10)
 
         self.pbar.set_fraction(1)
-        toLog("Password generation complete")
+        to_log("Password generation complete")
         self.password.set_text(toGen)
 
         def copy(s):
-            toLog("Copy to clipboard option was chosen")
-            pyclip.copy(toGen)
-
+            to_log("Copy to clipboard option was chosen")
+            if xclip:
+                pyclip.copy(toGen)
+            else:
+                self.clipboard.set_text(toGen, -1)
         def write(s):
-            toLog("Write to file option was chosen [WIP]")
+            to_log("Write to file option was chosen [WIP]")
             pass
 
         def cancel(s):
-            toLog("Clear option was chosen")
+            to_log("Clear option was chosen")
             global check
             check = None
             self.pbar.set_fraction(0)
@@ -84,6 +95,7 @@ class Display(gtk.Window):
         self.builder = gtk.Builder()
         self.builder.add_from_file("ui/main.glade")
         self.builder.connect_signals(self)
+        self.clipboard = gtk.Clipboard.get(gdk.SELECTION_CLIPBOARD)
 
         win = self.builder.get_object("win")
         win.set_title("PassGenie")
@@ -102,7 +114,6 @@ class Display(gtk.Window):
 
         self.passdone.hide()
         win.show()
-
 
 
 m = Display()

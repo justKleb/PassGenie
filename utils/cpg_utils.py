@@ -8,17 +8,18 @@ from itertools import product, chain
 from os import mkdir
 
 
-def toLog(toWrite):
+def to_log(toWrite, _type=0):
+    types = ["[INFO]", "[ERR]", "[WARN]", "[CRASH]"]
+    chosen_type = types[_type]
     log = open('run/log.log', 'a')
-    log.write(f'{dt.now().strftime("[%H:%M:%S]")} {toWrite}\n')
+    log.write(f'{dt.now().strftime("[%H:%M:%S]")} {chosen_type} {toWrite}\n')
     log.close()
 
 
-def clearLog():
+def clear_log():
     try:
-        log = open('run/log.log', 'w')
-        log.write('')
-        log.close()
+        with open('run/log.log', 'w') as log:
+            log.write('')
     except:
         print("Couldn't open the log file")
         raise FileExistsError("Log file not existing")
@@ -26,66 +27,66 @@ def clearLog():
 
 class utils:
 
-    def toDouble(toConv: float):
+    def to_double(to_conv: float):
         """Converts input into a double with proper round-up"""
-        toConv = str(toConv)
+        to_return = str(to_conv)
         whereDot = 0
         pos = 0
-        for x in toConv:
+        for x in to_return:
             pos += 1
             if x == '.':
-                savePos = pos
-                toConv = list(toConv)
-                if float(toConv[savePos + 1]) + 1 >= 10:
-                    if toConv[savePos] == '9':
-                        toConv[savePos - 2] = int(toConv[savePos - 2]) + 1
-                        toConv[savePos] = 0
+                save_pos = pos
+                to_return = list(to_return)
+                if float(to_return[save_pos + 1]) + 1 >= 10:
+                    if to_return[save_pos] == '9':
+                        to_return[save_pos - 2] = int(to_return[save_pos - 2]) + 1
+                        to_return[save_pos] = 0
                     else:
-                        toConv[savePos] = int(toConv[savePos]) + 1
-                    toConv[savePos + 1] = 0
+                        to_return[save_pos] = int(to_return[save_pos]) + 1
+                    to_return[save_pos + 1] = 0
                 else:
-                    if float(toConv[savePos + 2]) >= 5:
-                        toConv[savePos + 1] = int(toConv[savePos + 1]) + 1
-                toConv = toConv[:savePos + 2]
-                toConv = ''.join(str(y) for y in toConv)
-        return float(toConv)
+                    if float(to_return[save_pos + 2]) >= 5:
+                        to_return[save_pos + 1] = int(to_return[save_pos + 1]) + 1
+                to_return = to_return[:save_pos + 2]
+                to_return = ''.join(str(y) for y in to_return)
+        return float(to_return)
 
-    def allVars(chSet, maxleng):
+    def all_vars(ch_set, max_lenght):
         return (''.join(candidate)
-                for candidate in chain.from_iterable(product(chSet, repeat=i)
-                                                     for i in range(1, maxleng + 1)))
+                for candidate in chain.from_iterable(product(ch_set, repeat=i)
+                                                     for i in range(1, max_lenght + 1)))
 
 
 class passwordGen:
-    def genRandomSyms(leng: int):
+    def gen_random_syms(leng: int):
         """Generates specified amount of randomly generated symbols (Numbers and letters)"""
         if type(leng) != int:
             try:
                 leng = int(leng)
             except ValueError: return "wrongType"
-        toConv = []
-        base64Conv = ""
+        to_conv = []
+        base64_conv = ""
         for x in range(leng):
-            toConv.append(srandom.randint(0, 9))
-            if len(toConv) == leng:
-                ConvStr = ''.join(str(y) for y in toConv)
-                base64Conv = base64.b64encode(ConvStr.encode('ascii'))
-                base64Conv = base64Conv.decode('utf-8')
-            if len(base64Conv) > leng:
-                for i in range(len(base64Conv) - leng):
-                    base64Conv = base64Conv[:-1]
+            to_conv.append(srandom.randint(0, 9))
+            if len(to_conv) == leng:
+                conv_str = ''.join(str(y) for y in to_conv)
+                base64_conv = base64.b64encode(conv_str.encode('ascii'))
+                base64_conv = base64_conv.decode('utf-8')
+            if len(base64_conv) > leng:
+                for i in range(len(base64_conv) - leng):
+                    base64_conv = base64_conv[:-1]
 
-        return base64Conv
+        return base64_conv
 
-    def mirror(toMirror: str):
+    def mirror(to_mirror: str):
         """Mirrors the input and returns it"""
-        a = list(toMirror)
+        a = list(to_mirror)
         a.reverse()
         """for x in range(len(a)):
             out.append(a[(len(toMirror) - 1) - x])"""  # Legacy
         return ''.join(a)
 
-    def genRandomNums(leng: int):
+    def gen_random_nums(leng: int):
         """Generates specified amount of randomly generated numbers"""
         if type(leng) != int:
             try:
@@ -95,24 +96,24 @@ class passwordGen:
         for x in range(leng):
             nums.append(srandom.randint(0, 9))
             if len(nums) == leng:
-                convStr = ''.join(str(y) for y in nums)
-        return convStr
+                conv_str = ''.join(str(y) for y in nums)
+        return conv_str
 
-    def genRandomLetters(leng: int):
+    def gen_random_letters(leng: int):
         """Generates specified amount of randomly generated letters"""
         if type(leng) != int:
             try:
                 leng = int(leng)
             except ValueError: return "wrongType"
         lets = []
-        letsBase = list(string.ascii_lowercase)
+        lets_base = list(string.ascii_lowercase)
         for x in range(leng):
-            lets.append(letsBase[srandom.randint(0, 25)])
+            lets.append(lets_base[srandom.randint(0, 25)])
             if len(lets) == leng:
                 convStr = ''.join(lets)
         return convStr
 
-    def genRandomWords(leng: int):
+    def gen_random_words(leng: int):
         """Generates specified amount of randomly generated words"""
         if type(leng) != int:
             try:
@@ -121,20 +122,20 @@ class passwordGen:
                 return "wrongType"
         with open('./res/words.txt', 'r') as words:
             wlist = words.read().split('\n'); wlist = [i.capitalize() for i in wlist]
-        toReturn = []
+        to_return = []
         for i in range(leng):
-            toReturn.append(wlist[srandom.randint(0, len(wlist))])
-        return ''.join(toReturn)
+            to_return.append(wlist[srandom.randint(0, len(wlist))])
+        return ''.join(to_return)
 
 class percentage:
 
-    def AinB(a, b):
+    def a_from_b(a, b):
         """Returns how many percents is 'a' from 'b'"""
         return (a / b) * 100
 
-    def fromA(a, b):
-        """Returns specified percents from 'a' number"""
-        return (a / 100) * b
+    def percents_of(a, b):
+        """Returns 'a' percents from 'b' number"""
+        return (b / 100) * a
 
     def fromPercent(a, b):
         """Returns number from how much percent is number from it"""
@@ -143,29 +144,29 @@ class percentage:
 
 class passwordUtils:
 
-    def savePass(toSave: str, passName: str):
+    def save_pass(to_save: str, pass_name: str):
         try:
             mkdir('./passwords')
-            toLog('Passwords dir. isn`t present, created one')
+            to_log('Passwords dir. isn`t present, created one')
         except FileExistsError:
-            toLog('Passwords dir. is already present, canceled creation process')
+            to_log('Passwords dir. is already present, canceled creation process')
 
-        with open('./passwords/' + passName + '.json') as savingPass:
-            json.dumps({'name': passName,
+        with open('./passwords/' + pass_name + '.json') as saving_pass:
+            json.dumps({'name': pass_name,
                         'pass': '',
-                        'icon' : ''})
+                        'icon': ''})
 
-    def brute(toTest: str, timeInMinutes: float):
+    def brute(to_test: str, time_in_minutes: float):
         """Simulates real brute-force attack on password, returns True if password did get cracked, False if didn't."""
         syms = str(list(string.ascii_lowercase) +
                    list(string.ascii_uppercase) +
                    list("""1234567890 =-_+/?\|'";:><,.*&7^%$#@!()[]{} """))
         start = time.time()
-        toLog("Starting password testing")
-        for attempt in utils.allVars(syms, 10):
-            if attempt == toTest:
-                toLog(f"Cracked in {time.time() - start} seconds or {(time.time() - start) // 60} minutes.")
+        to_log("Starting password testing")
+        for attempt in utils.all_vars(syms, 10):
+            if attempt == to_test:
+                to_log(f"Cracked in {time.time() - start} seconds or {(time.time() - start) // 60} minutes.")
                 return False, f"Cracked in {time.time() - start} seconds or {(time.time() - start) // 60} minutes"
-            if abs((time.time() - start) - timeInMinutes * 60) <= 0.1:
-                toLog("That takes longer than specified, password check completed. Password wasn't cracked")
+            if abs((time.time() - start) - time_in_minutes * 60) <= 0.1:
+                to_log("That takes longer than specified, password check completed. Password wasn't cracked")
                 return True, f"That takes longer than specified, password check completed. Password wasn't cracked"
