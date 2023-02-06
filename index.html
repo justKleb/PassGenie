@@ -1,1 +1,25 @@
-When the world is Hello
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>PassGenie</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <h1>PassGenie</h1>
+    <div id="container">
+      <select id="select">
+        <option value="RanS">Random Symbols</option>
+        <option value="RanN">Random Numbers</option>
+        <option value="RanL">Random Letters</option>
+        <option value="RanW">Random Words</option>
+        <option value="Mirror">Mirror previous part</option>
+        <option value="Custom">Your part</option>
+      </select>
+      <input type="text" id="textfield" />
+      <button id="add">Add</button>
+      <ul id="list"></ul>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
