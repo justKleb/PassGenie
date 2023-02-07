@@ -108,7 +108,8 @@ let observer = new MutationObserver(function () {
 
 addButton.addEventListener("click", () => {
   if (
-    (select.value !== "Custom" || select.value !== "Mirror") &&
+    select.value !== "Custom" &&
+    select.value !== "Mirror" &&
     textfield.value !== ""
   ) {
     const item = document.createElement("li");
