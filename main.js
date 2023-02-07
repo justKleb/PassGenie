@@ -87,10 +87,24 @@ async function genRandomWords(leng) {
   return toReturn.join("");
 }
 
-const select = document.querySelector("#select");
-const textfield = document.querySelector("#textfield");
-const addButton = document.querySelector("#add");
-const list = document.querySelector("#list");
+const select = document.getElementById("select");
+const textfield = document.getElementById("textfield");
+const addButton = document.getElementById("add");
+const list = document.getElementById("list");
+const screenHeight = screen.height;
+let lis = list.getElementsByClassName("list-item");
+let combinedText = "";
+let generatedPassword = document.getElementById("generated-password");
+let container = document.getElementById("container");
+let halfHeight = screenHeight / 2;
+
+let observer = new MutationObserver(function () {
+  if (list.children.length >= 20) {
+    container.style.overflow = "scroll";
+    container.style.height = halfHeight + "px";
+    console.log(halfHeight + "px");
+  }
+});
 
 addButton.addEventListener("click", () => {
   if (
@@ -122,10 +136,28 @@ addButton.addEventListener("click", () => {
         <span class="remove-part">&times;</span>
       `;
       });
+    } else {
+      console.log("How did this even happen...?");
+      console.error("Wrong selection.");
     }
     list.appendChild(item);
-    textfield.value = "";
-    select.value = "";
+    //textfield.value = "";
+
+    // * Removing the selection may be annoying, so it defaults to Random Symbols
+    select.value = "RanS";
+
+    lis = list.getElementsByClassName("list-item");
+    combinedText = "";
+
+    for (let i = 0; i < lis.length; i++) {
+      combinedText += lis[i].firstChild.textContent.replace(/\s/g, "");
+      //console.log(combinedText);
+    }
+    generatedPassword.textContent = combinedText;
+
+    observer.observe(list, {
+      childList: true,
+    });
 
     const crossIcons = document.querySelectorAll(".remove-part");
     crossIcons.forEach((icon) => {
